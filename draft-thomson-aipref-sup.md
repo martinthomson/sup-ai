@@ -2,25 +2,25 @@
 title: "Short Usage Preference Strings for AI"
 category: std
 
-docname: draft-thomson-aicontrol-sup-latest
+docname: draft-thomson-aipref-sup-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: true
 v: 3
-# area: AREA
-# workgroup: WG Working Group
+area: "Web and Internet Transport"
+workgroup: "AI Preferences"
 keyword:
  - next generation
  - unicorn
  - sparkling distributed ledger
 venue:
-#  group: WG
-#  type: Working Group
-#  mail: WG@example.com
-#  arch: https://example.com/WG
+  group: "AI Preferences"
+  type: "Working Group"
+  mail: "ai-control@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/ai-control/"
   github: "martinthomson/sup-ai"
-  latest: "https://martinthomson.github.io/sup-ai/draft-thomson-aicontrol-sup.html"
+  latest: "https://martinthomson.github.io/sup-ai/draft-thomson-aipref-sup.html"
 
 author:
  -
