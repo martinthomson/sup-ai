@@ -3,12 +3,12 @@
 
 
 WG Working Group                                              Y. N. Here
-Internet-Draft                                    Your Organization Here
-Intended status: Informational                          14 February 2025
+Internet-Draft                                                   Mozilla
+Intended status: Standards Track                        14 February 2025
 Expires: 18 August 2025
 
 
-                           TODO - Your title
+                 Short Usage Preference Strings for AI
                   draft-todo-yourname-protocol-latest
 
 Abstract
@@ -110,5 +110,5 @@ Acknowledgments
 Author's Address
 
    Your Name Here
-   Your Organization Here
+   Mozilla
    Email: your.email@example.com
