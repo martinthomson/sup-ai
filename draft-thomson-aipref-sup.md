@@ -629,6 +629,13 @@ They are exemplary only
 and are biased toward being comprehensible
 rather than being secure.
 
+Preference strings could include characters
+that can create confusing or misleading renderings.
+For instance, invisible characters or U+8 (backspace) could be used
+to create a misleading representation.
+These characters can be avoided when authoring preference expressions
+and replaced when displaying them (using U+FFFD for example).
+
 
 # IANA Considerations {#iana}
 
