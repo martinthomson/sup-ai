@@ -109,6 +109,46 @@ How those defaults are determined is not specified.
 {::boilerplate bcp14-tagged}
 
 
+# Examples
+
+The following string opts out of all forms of automated processing
+for the associated content:
+
+~~~
+tdm=n
+~~~
+
+On its own, this string
+does not define which content
+is affected.
+
+The following shows how a preference
+to allow general text and data mining,
+except for artificial intelligence applications,
+is applied to content that is delivered in an HTTP response;
+see {{http}}.
+
+~~~http-message
+404 Not Found
+Date: Mon, 17 Feb 2025 03:32:05 GMT
+Usage-Pref: tdm=y,ai=n
+Content-Type: text/html
+
+<HTML page contents omitted from this example>
+~~~
+
+Similarly, a website might use "robots.txt" (see {{robots}})
+to indicate that search indexing
+is the only acceptable form of data use
+for all resources with a path that starts with "/article/":
+
+~~~robots
+User-Agent: *
+Usage-Pref: tdm=n,search=y
+Allow: /article/
+~~~
+
+
 # Preference Expression Strings
 
 A preference expression string is a Unicode string.
@@ -462,10 +502,10 @@ This provides content creators and distributors choice
 in how they manage the signaling of their preferences.
 
 
-## The robots.txt Format {#robots}
+## The "robots.txt" Format {#robots}
 
-The robots.txt file {{!ROBOTS=RFC9309}},
-also known as the Robots Exclusion Protocol,
+Use of "robots.txt" ,
+or the Robots Exclusion Protocol {{!ROBOTS=RFC9309}},
 provides automated crawlers with information
 about what resources can be gathered.
 
@@ -473,7 +513,7 @@ This is a file that is served in a well-known location by HTTP servers.
 
 An extension is defined for this format
 to allow for carrying simple usage preference strings.
-A rule name of "usage-pref" is added to each group,
+A rule name of "usage" is added to each group,
 appearing between the `startgroupline` and `rule` lines as follows:
 
 ~~~abnf
@@ -481,12 +521,12 @@ group = startgroupline
         *(startgroupline / emptyline)
         *(usage / emptyline)
         *(rule / emptyline)
-usage = *WS "usage-pref" *WS ":" *UTF8-char-noctl EOL
+usage = *WS "usage" *WS ":" *UTF8-char-noctl EOL
 ~~~
 
 Notes:
 
-* The label "usage-pref" is case insentive,
+* The label "usage" is case insentive,
   but the usage preference string is case sensitive.
 
 * Preference expressions will be truncated
@@ -496,13 +536,30 @@ Notes:
 
 ## HTTP Header Field {#http}
 
-An HTTP Response Header field called Usage-Pref is defined.
+An HTTP Response Header field called Content-Usage is defined.
 
 This field is defined as a structured field dictionary,
 as defined in {{Section 3.2 of !RFC9651}}.
 
 Dictionary members MUST all include a single token value
 ({{Section 3.3.4 of !RFC9651}}) that is either "y" or "n".
+
+The Content-Usage field applies to the content
+of a request or response,
+not the resource or representation.
+
+The Content-Usage field can be used in requests
+to have the preference apply to the content of the request.
+Servers could retain a copy of preferences if the content of a request
+is used to answer later requests.
+For example,
+the content of a PUT request that is used
+to answer subsequent GET requests.
+Servers SHOULD reject requests that include Content-Usage
+unless the same or compatible preferences can be provided
+to entities that might obtain the included content.
+
+Content-Usage does not have any special effect on caching.
 
 The value of this field MAY be first parsed
 using a structured field parser.
@@ -515,8 +572,7 @@ This implies the following restrictions:
 
 * Dictionary members are tokens,
   not Booleans ({{Section 3.3.6 of ?RFC9651}}).
-  This means that members with no value or a value of "?1"
-  MUST be ignored.
+  Boolean members MUST be ignored.
 
 * Dictionary members with parameters MUST be ignored.
 
@@ -559,6 +615,12 @@ rather than being secure.
 
 
 # IANA Considerations {#iana}
+
+This document defines a new registry for labels ({{iana-labels}}) and
+an HTTP header field ({{iana-http}}).
+
+
+## Preference Label Registry {#iana-labels}
 
 This document establishes a registry
 that lists Labels for Preference Expressions
@@ -606,7 +668,7 @@ Contact:
 {: newline="true" spacing="compact"}
 
 
-## Registration Guidance
+### Registration Guidance
 
 An ideal label for a new registration is
 short, descriptive, and memorable.
@@ -642,7 +704,7 @@ labels that promote proprietary products or unproven concepts.
 Expert decisions can be appealed to the IESG.
 
 
-## Initial Registry Contents
+### Initial Registry Contents
 
 {{table-iana-labels}} tabulates the other fields
 for registrations of labels from {{labels}}.
@@ -678,6 +740,28 @@ Contact:
 : IETF AI-PREF WG (ai-control@ietf.org)
 {: spacing="compact"}
 
+
+## HTTP Content-Usage Field Registration {#iana-http}
+
+An HTTP field named Content-Usage is registered
+in the Hypertext Transfer Protocol (HTTP) Field Name Registry,
+following the procedures in {{Section 18.4 of !HTTP=RFC9110}}.
+The following values are registered:
+
+Field Name:
+
+: Content-Usage
+
+Status:
+
+: permanent
+
+Reference:
+
+: this document
+
+Comments:
+{: spacing="compact"}
 
 
 --- back
