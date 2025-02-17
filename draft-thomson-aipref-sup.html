@@ -440,7 +440,7 @@ dl {
     margin-bottom: 0;
   }
 }
-dl > dt {
+dl:not(.dlNewline) > dt {
   float: left;
   margin-right: 2ch;
   min-width: 8ch;
@@ -1239,9 +1239,25 @@ An HTTP header field is also defined.<a href="#section-abstract-2" class="pilcro
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-registration-guidance" class="internal xref">Registration Guidance</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-initial-registry-contents" class="internal xref">Initial Registry Contents</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
             <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
@@ -1467,8 +1483,8 @@ The "genai" label is more specific than "ai".<a href="#section-3-2.6.1" class="p
         <dd class="break"></dd>
 <dt id="section-3-2.7">search:</dt>
         <dd style="margin-left: 1.5em" id="section-3-2.8">
-          <p id="section-3-2.8.1">The "search" label describes a usage
-whereby content is indexed aid in its discovery
+          <p id="section-3-2.8.1">The "search" label describes a use
+of content for developing a search index
 and the use of those indexes to find content.
 The "search" label is more specific than "tdm".<a href="#section-3-2.8.1" class="pilcrow">¶</a></p>
 </dd>
@@ -1881,32 +1897,219 @@ rather than being secure.<a href="#section-6-4" class="pilcrow">¶</a></p>
       <h2 id="name-iana-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-7-1">TODO establish a registry for labels<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">This document establishes a registry
+that lists Labels for Preference Expressions
+for Automated Use of Content
+with IANA.
+The policy for new registrations
+is Specification Required <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">Each entry has the following fields:<a href="#section-7-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlCompact dlNewline" id="section-7-3">
+        <dt id="section-7-3.1">Label:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-3.2">
+          <p id="section-7-3.2.1">a Unicode string (see <a href="#new" class="auto internal xref">Section 3.1</a> for advice on selecting values)<a href="#section-7-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-3.3">Definition:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-3.4">
+          <p id="section-7-3.4.1">a short description of the automated usage
+that the label applies to<a href="#section-7-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-3.5">Narrows:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-3.6">
+          <p id="section-7-3.6.1">a list of other labels
+that this label is more specific than<a href="#section-7-3.6.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-3.7">Specification:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-3.8">
+          <p id="section-7-3.8.1">a link to a publicly accessible specification
+that contains a more complete definition<a href="#section-7-3.8.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-3.9">Status:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-3.10">
+          <p id="section-7-3.10.1">either is "provisional" or "permanent" (see below)<a href="#section-7-3.10.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-3.11">Date:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-3.12">
+          <p id="section-7-3.12.1">the date of the last update to the registration<a href="#section-7-3.12.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-3.13">Change Controller:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-3.14">
+          <p id="section-7-3.14.1">the entity responsible for the specification<a href="#section-7-3.14.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-7-3.15">Contact:</dt>
+        <dd style="margin-left: 1.5em" id="section-7-3.16">
+          <p id="section-7-3.16.1">contact details for the registrant<a href="#section-7-3.16.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
+<div id="registration-guidance">
+<section id="section-7.1">
+        <h3 id="name-registration-guidance">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-registration-guidance" class="section-name selfRef">Registration Guidance</a>
+        </h3>
+<p id="section-7.1-1">An ideal label for a new registration is
+short, descriptive, and memorable.
+Lowercase characters (U+61 through U+7A) are most compatible;
+see <a href="#new-chars" class="auto internal xref">Section 3.2</a>.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">Provisional registrations can be used
+by entities other than a change controller
+to register labels in order to avoid registration collisions.
+Provisional registrations can omit fields.
+However, provisional labels can be removed
+if details are not provided within 12 months.
+Removals are subject to approval by the IESG.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-3">Designated experts are advised to discourage new permanent registrations
+in favor of provisional registrations.
+Once utility and -- critically -- understanding
+of labels has been demonstrated,
+provisional registrations can be upgraded to permanent status.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1-4">Designated experts are expected to help ensure that registrations
+correctly identify which labels are more general.
+This could include updates to existing labels,
+to reference a new registration as being more general.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.1-5">Designated experts are expected to deny registration requests for
+large numbers of labels,
+labels that are unclear in purpose,
+labels that are too similar to existing labels,
+labels that are long, and
+labels that promote proprietary products or unproven concepts.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
+<p id="section-7.1-6">Expert decisions can be appealed to the IESG.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="sec-normative-references">
+<div id="initial-registry-contents">
+<section id="section-7.2">
+        <h3 id="name-initial-registry-contents">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-initial-registry-contents" class="section-name selfRef">Initial Registry Contents</a>
+        </h3>
+<p id="section-7.2-1"><a href="#_table-iana-labels" class="auto internal xref">Table 2</a> tabulates the other fields
+for registrations of labels from <a href="#labels" class="auto internal xref">Section 2.2</a>.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<span id="name-initial-label-registrations"></span><div id="_table-iana-labels">
+<table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-initial-label-registrations" class="selfRef">Initial Label Registrations</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Label</th>
+              <th class="text-left" rowspan="1" colspan="1">Definition</th>
+              <th class="text-left" rowspan="1" colspan="1">Narrows</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">tdm</td>
+              <td class="text-left" rowspan="1" colspan="1">Any automated process that extracts information from content</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ai</td>
+              <td class="text-left" rowspan="1" colspan="1">Training or use of any machine learning system (or AI)</td>
+              <td class="text-left" rowspan="1" colspan="1">tdm</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">genai</td>
+              <td class="text-left" rowspan="1" colspan="1">Training or use of machine learning (or AI) that can generate content</td>
+              <td class="text-left" rowspan="1" colspan="1">ai</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">search</td>
+              <td class="text-left" rowspan="1" colspan="1">Generation of search index or use for search applications</td>
+              <td class="text-left" rowspan="1" colspan="1">tdm</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="section-7.2-3">Initial registrations in this registry also include the following values:<a href="#section-7.2-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlCompact dlParallel" id="section-7.2-4">
+          <dt id="section-7.2-4.1">Specification:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-4.2">
+            <p id="section-7.2-4.2.1">this document<a href="#section-7.2-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.2-4.3">Status:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-4.4">
+            <p id="section-7.2-4.4.1">permanent<a href="#section-7.2-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.2-4.5">Date:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-4.6">
+            <p id="section-7.2-4.6.1">the date of publication of this document<a href="#section-7.2-4.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.2-4.7">Change Controller:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-4.8">
+            <p id="section-7.2-4.8.1">IETF<a href="#section-7.2-4.8.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.2-4.9">Contact:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-4.10">
+            <p id="section-7.2-4.10.1">IETF AI-PREF WG (ai-control@ietf.org)<a href="#section-7.2-4.10.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-combined-references">
 <section id="section-8">
-      <h2 id="name-normative-references">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      <h2 id="name-references">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
+<section id="section-8.1">
+        <h3 id="name-normative-references">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
 <dl class="references">
 <dt id="RFC2119">[RFC2119]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8126">[RFC8126]</dt>
+        <dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9651">[RFC9651]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Nottingham, M.</span> and <span class="refAuthor">P. Kamp</span>, <span class="refTitle">"Structured Field Values for HTTP"</span>, <span class="seriesInfo">RFC 9651</span>, <span class="seriesInfo">DOI 10.17487/RFC9651</span>, <time datetime="2024-09" class="refDate">September 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9651">https://www.rfc-editor.org/rfc/rfc9651</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="ROBOTS">[ROBOTS]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Illyes, G.</span>, <span class="refAuthor">Zeller, H.</span>, and <span class="refAuthor">L. Sassman</span>, <span class="refTitle">"Robots Exclusion Protocol"</span>, <span class="seriesInfo">RFC 9309</span>, <span class="seriesInfo">DOI 10.17487/RFC9309</span>, <time datetime="2022-09" class="refDate">September 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9309">https://www.rfc-editor.org/rfc/rfc9309</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-8.2">
+        <h3 id="name-informative-references">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="REP-PURPOSE">[REP-PURPOSE]</dt>
+        <dd>
+<span class="refAuthor">Illyes, G.</span>, <span class="refTitle">"Robots Exclusion Protocol User Agent Purpose Extension"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-illyes-rep-purpose-00</span>, <time datetime="2024-10-18" class="refDate">18 October 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-illyes-rep-purpose-00">https://datatracker.ietf.org/doc/html/draft-illyes-rep-purpose-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="VOCAB">[VOCAB]</dt>
+      <dd>
+<span class="refAuthor">Vaughan, T.</span>, <span class="refTitle">"Vocabulary for Expressing Content Preferences for AI Training"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-vaughan-aipref-vocab-00</span>, <time datetime="2025-01-20" class="refDate">20 January 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-vaughan-aipref-vocab-00">https://datatracker.ietf.org/doc/html/draft-vaughan-aipref-vocab-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
 </section>
 </div>
 <div id="acknowledgments">
@@ -1914,7 +2117,12 @@ rather than being secure.<a href="#section-6-4" class="pilcrow">¶</a></p>
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">This document is informed by discussions at the AI-CONTROL workshop.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">Drafts from Gary Ilyes (<span>[<a href="#REP-PURPOSE" class="cite xref">REP-PURPOSE</a>]</span>
+and Thom Vaughan <span>[<a href="#VOCAB" class="cite xref">VOCAB</a>]</span>
+helped inform some of the choices.
+This document aims to be more complete than the former
+and simpler than the latter.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">

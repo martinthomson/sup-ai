@@ -95,7 +95,11 @@ Table of Contents
      5.3.  Content Metadata
    6.  Security Considerations
    7.  IANA Considerations
-   8.  Normative References
+     7.1.  Registration Guidance
+     7.2.  Initial Registry Contents
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Acknowledgments
    Author's Address
 
@@ -253,9 +257,9 @@ Table of Contents
       trained using the content.  The "genai" label is more specific
       than "ai".
 
-   search:  The "search" label describes a usage whereby content is
-      indexed aid in its discovery and the use of those indexes to find
-      content.  The "search" label is more specific than "tdm".
+   search:  The "search" label describes a use of content for developing
+      a search index and the use of those indexes to find content.  The
+      "search" label is more specific than "tdm".
 
       |  Note that although search applications often use machine
       |  learning, "search" is not more specific than the "ai" label.
@@ -536,14 +540,105 @@ Table of Contents
 
 7.  IANA Considerations
 
-   TODO establish a registry for labels
+   This document establishes a registry that lists Labels for Preference
+   Expressions for Automated Use of Content with IANA.  The policy for
+   new registrations is Specification Required [RFC8126].
 
-8.  Normative References
+   Each entry has the following fields:
+
+   Label:
+      a Unicode string (see Section 3.1 for advice on selecting values)
+   Definition:
+      a short description of the automated usage that the label applies
+      to
+   Narrows:
+      a list of other labels that this label is more specific than
+   Specification:
+      a link to a publicly accessible specification that contains a more
+      complete definition
+   Status:
+      either is "provisional" or "permanent" (see below)
+   Date:
+      the date of the last update to the registration
+   Change Controller:
+      the entity responsible for the specification
+   Contact:
+      contact details for the registrant
+
+7.1.  Registration Guidance
+
+   An ideal label for a new registration is short, descriptive, and
+   memorable.  Lowercase characters (U+61 through U+7A) are most
+   compatible; see Section 3.2.
+
+   Provisional registrations can be used by entities other than a change
+   controller to register labels in order to avoid registration
+   collisions.  Provisional registrations can omit fields.  However,
+   provisional labels can be removed if details are not provided within
+   12 months.  Removals are subject to approval by the IESG.
+
+   Designated experts are advised to discourage new permanent
+   registrations in favor of provisional registrations.  Once utility
+   and -- critically -- understanding of labels has been demonstrated,
+   provisional registrations can be upgraded to permanent status.
+
+   Designated experts are expected to help ensure that registrations
+   correctly identify which labels are more general.  This could include
+   updates to existing labels, to reference a new registration as being
+   more general.
+
+   Designated experts are expected to deny registration requests for
+   large numbers of labels, labels that are unclear in purpose, labels
+   that are too similar to existing labels, labels that are long, and
+   labels that promote proprietary products or unproven concepts.
+
+   Expert decisions can be appealed to the IESG.
+
+7.2.  Initial Registry Contents
+
+   Table 2 tabulates the other fields for registrations of labels from
+   Section 2.2.
+
+        +========+=====================================+=========+
+        | Label  | Definition                          | Narrows |
+        +========+=====================================+=========+
+        | tdm    | Any automated process that extracts |         |
+        |        | information from content            |         |
+        +--------+-------------------------------------+---------+
+        | ai     | Training or use of any machine      | tdm     |
+        |        | learning system (or AI)             |         |
+        +--------+-------------------------------------+---------+
+        | genai  | Training or use of machine learning | ai      |
+        |        | (or AI) that can generate content   |         |
+        +--------+-------------------------------------+---------+
+        | search | Generation of search index or use   | tdm     |
+        |        | for search applications             |         |
+        +--------+-------------------------------------+---------+
+
+                   Table 2: Initial Label Registrations
+
+   Initial registrations in this registry also include the following
+   values:
+
+   Specification:  this document
+   Status:  permanent
+   Date:  the date of publication of this document
+   Change Controller:  IETF
+   Contact:  IETF AI-PREF WG (ai-control@ietf.org)
+
+8.  References
+
+8.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
+              Writing an IANA Considerations Section in RFCs", BCP 26,
+              RFC 8126, DOI 10.17487/RFC8126, June 2017,
+              <https://www.rfc-editor.org/rfc/rfc8126>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -558,9 +653,28 @@ Table of Contents
               DOI 10.17487/RFC9309, September 2022,
               <https://www.rfc-editor.org/rfc/rfc9309>.
 
+8.2.  Informative References
+
+   [REP-PURPOSE]
+              Illyes, G., "Robots Exclusion Protocol User Agent Purpose
+              Extension", Work in Progress, Internet-Draft, draft-
+              illyes-rep-purpose-00, 18 October 2024,
+              <https://datatracker.ietf.org/doc/html/draft-illyes-rep-
+              purpose-00>.
+
+   [VOCAB]    Vaughan, T., "Vocabulary for Expressing Content
+              Preferences for AI Training", Work in Progress, Internet-
+              Draft, draft-vaughan-aipref-vocab-00, 20 January 2025,
+              <https://datatracker.ietf.org/doc/html/draft-vaughan-
+              aipref-vocab-00>.
+
 Acknowledgments
 
-   TODO acknowledge.
+   This document is informed by discussions at the AI-CONTROL workshop.
+
+   Drafts from Gary Ilyes ([REP-PURPOSE] and Thom Vaughan [VOCAB] helped
+   inform some of the choices.  This document aims to be more complete
+   than the former and simpler than the latter.
 
 Author's Address
 
