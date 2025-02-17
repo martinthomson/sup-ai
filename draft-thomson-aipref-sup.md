@@ -442,8 +442,8 @@ according to a preference expression.
       replace any value of UNKNOWN for that more specific label
       with the value from this (more general) label.
 
-   b. If all aspect of the usage
-      is covered by more specific labels
+   b. If all aspects of the usage
+      are covered by more specific labels
       discard the more general label from the record.
 
 2. If the value for any of the remaining labels is UNKNOWN,
