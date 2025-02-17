@@ -760,9 +760,9 @@ Acknowledgments
 
    This document is informed by discussions at the AI-CONTROL workshop.
 
-   Drafts from Gary Ilyes ([REP-PURPOSE] and Thom Vaughan [VOCAB] helped
-   inform some of the choices.  This document aims to be more complete
-   than the former and simpler than the latter.
+   Drafts from Gary Ilyes ([REP-PURPOSE]) and Thom Vaughan ([VOCAB])
+   helped inform some of the choices.  This document aims to be more
+   complete than the former and simpler than the latter.
 
 Author's Address
 
