@@ -2,10 +2,10 @@
 
 This is the working area for the individual Internet-Draft, "Short Usage Preference Strings for AI".
 
-* [Editor's Copy](https://martinthomson.github.io/sup-ai/#go.draft-thomson-aicontrol-sup.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-thomson-aicontrol-sup)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-thomson-aicontrol-sup)
-* [Compare Editor's Copy to Individual Draft](https://martinthomson.github.io/sup-ai/#go.draft-thomson-aicontrol-sup.diff)
+* [Editor's Copy](https://martinthomson.github.io/sup-ai/#go.draft-thomson-aipref-sup.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-thomson-aipref-sup)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-thomson-aipref-sup)
+* [Compare Editor's Copy to Individual Draft](https://martinthomson.github.io/sup-ai/#go.draft-thomson-aipref-sup.diff)
 
 
 ## Contributing
