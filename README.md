@@ -1,6 +1,6 @@
-# Short Usage Preference Strings for AI
+# Short Usage Preference Strings for Automated Processing
 
-This is the working area for the individual Internet-Draft, "Short Usage Preference Strings for AI".
+This is the working area for the individual Internet-Draft, "Short Usage Preference Strings for Automated Processing".
 
 * [Editor's Copy](https://martinthomson.github.io/sup-ai/#go.draft-thomson-aipref-sup.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-thomson-aipref-sup)
