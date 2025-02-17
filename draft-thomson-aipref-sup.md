@@ -234,8 +234,8 @@ genai:
 
 search:
 
-: The "search" label describes a usage
-  whereby content is indexed aid in its discovery
+: The "search" label describes a use
+  of content for developing a search index
   and the use of those indexes to find content.
   The "search" label is more specific than "tdm".
 
@@ -560,7 +560,124 @@ rather than being secure.
 
 # IANA Considerations {#iana}
 
-TODO establish a registry for labels
+This document establishes a registry
+that lists Labels for Preference Expressions
+for Automated Use of Content
+with IANA.
+The policy for new registrations
+is Specification Required {{!RFC8126}}.
+
+Each entry has the following fields:
+
+Label:
+
+: a Unicode string (see {{new}} for advice on selecting values)
+
+Definition:
+
+: a short description of the automated usage
+  that the label applies to
+
+Narrows:
+
+: a list of other labels
+  that this label is more specific than
+
+Specification:
+
+: a link to a publicly accessible specification
+  that contains a more complete definition
+
+Status:
+
+: either is "provisional" or "permanent" (see below)
+
+Date:
+
+: the date of the last update to the registration
+
+Change Controller:
+
+: the entity responsible for the specification
+
+Contact:
+
+: contact details for the registrant
+{: newline="true" spacing="compact"}
+
+
+## Registration Guidance
+
+An ideal label for a new registration is
+short, descriptive, and memorable.
+Lowercase characters (U+61 through U+7A) are most compatible;
+see {{new-chars}}.
+
+Provisional registrations can be used
+by entities other than a change controller
+to register labels in order to avoid registration collisions.
+Provisional registrations can omit fields.
+However, provisional labels can be removed
+if details are not provided within 12 months.
+Removals are subject to approval by the IESG.
+
+Designated experts are advised to discourage new permanent registrations
+in favor of provisional registrations.
+Once utility and -- critically -- understanding
+of labels has been demonstrated,
+provisional registrations can be upgraded to permanent status.
+
+Designated experts are expected to help ensure that registrations
+correctly identify which labels are more general.
+This could include updates to existing labels,
+to reference a new registration as being more general.
+
+Designated experts are expected to deny registration requests for
+large numbers of labels,
+labels that are unclear in purpose,
+labels that are too similar to existing labels,
+labels that are long, and
+labels that promote proprietary products or unproven concepts.
+
+Expert decisions can be appealed to the IESG.
+
+
+## Initial Registry Contents
+
+{{table-iana-labels}} tabulates the other fields
+for registrations of labels from {{labels}}.
+
+| Label | Definition | Narrows |
+|:-|:-|:-|
+| tdm | Any automated process that extracts information from content | |
+| ai | Training or use of any machine learning system (or AI) | tdm |
+| genai | Training or use of machine learning (or AI) that can generate content | ai |
+| search | Generation of search index or use for search applications | tdm |
+{: #table-iana-labels title="Initial Label Registrations"}
+
+Initial registrations in this registry also include the following values:
+
+Specification:
+
+: this document
+
+Status:
+
+: permanent
+
+Date:
+
+: the date of publication of this document
+
+Change Controller:
+
+: IETF
+
+Contact:
+
+: IETF AI-PREF WG (ai-control@ietf.org)
+{: spacing="compact"}
+
 
 
 --- back
@@ -568,4 +685,10 @@ TODO establish a registry for labels
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+This document is informed by discussions at the AI-CONTROL workshop.
+
+Drafts from Gary Ilyes ({{?REP-PURPOSE=I-D.illyes-rep-purpose}}
+and Thom Vaughan {{?VOCAB=I-D.vaughan-aipref-vocab}}
+helped inform some of the choices.
+This document aims to be more complete than the former
+and simpler than the latter.
