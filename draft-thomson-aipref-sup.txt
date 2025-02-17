@@ -74,32 +74,35 @@ Table of Contents
    1.  Introduction
      1.1.  Applicability
      1.2.  Conventions and Definitions
-   2.  Preference Expression Strings
-     2.1.  Preference
-     2.2.  Labels
-     2.3.  Values
-     2.4.  Duplicated Labels
-     2.5.  Specificity
-   3.  Usage Labels
-     3.1.  Defining New Labels
-     3.2.  Label Characters
-   4.  Processing Preference Expression Strings
-     4.1.  Parsing
-     4.2.  Determination
-     4.3.  Optimization and Length Limits
-     4.4.  Multiple Preference Expressions
-     4.5.  Multiple Usages
-   5.  Carrying Preference Expressions
-     5.1.  The robots.txt Format
-     5.2.  HTTP Header Field
-     5.3.  Content Metadata
-   6.  Security Considerations
-   7.  IANA Considerations
-     7.1.  Registration Guidance
-     7.2.  Initial Registry Contents
-   8.  References
-     8.1.  Normative References
-     8.2.  Informative References
+   2.  Examples
+   3.  Preference Expression Strings
+     3.1.  Preference
+     3.2.  Labels
+     3.3.  Values
+     3.4.  Duplicated Labels
+     3.5.  Specificity
+   4.  Usage Labels
+     4.1.  Defining New Labels
+     4.2.  Label Characters
+   5.  Processing Preference Expression Strings
+     5.1.  Parsing
+     5.2.  Determination
+     5.3.  Optimization and Length Limits
+     5.4.  Multiple Preference Expressions
+     5.5.  Multiple Usages
+   6.  Carrying Preference Expressions
+     6.1.  The "robots.txt" Format
+     6.2.  HTTP Header Field
+     6.3.  Content Metadata
+   7.  Security Considerations
+   8.  IANA Considerations
+     8.1.  Preference Label Registry
+       8.1.1.  Registration Guidance
+       8.1.2.  Initial Registry Contents
+     8.2.  HTTP Content-Usage Field Registration
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Acknowledgments
    Author's Address
 
@@ -158,14 +161,42 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-2.  Preference Expression Strings
+2.  Examples
+
+   The following string opts out of all forms of automated processing
+   for the associated content:
+
+   tdm=n
+
+   On its own, this string does not define which content is affected.
+
+   The following shows how a preference to allow general text and data
+   mining, except for artificial intelligence applications, is applied
+   to content that is delivered in an HTTP response; see Section 6.2.
+
+   404 Not Found
+   Date: Mon, 17 Feb 2025 03:32:05 GMT
+   Usage-Pref: tdm=y,ai=n
+   Content-Type: text/html
+
+   <HTML page contents omitted from this example>
+
+   Similarly, a website might use "robots.txt" (see Section 6.1) to
+   indicate that search indexing is the only acceptable form of data use
+   for all resources with a path that starts with "/article/":
+
+   User-Agent: *
+   Usage-Pref: tdm=n,search=y
+   Allow: /article/
+
+3.  Preference Expression Strings
 
    A preference expression string is a Unicode string.
 
    A preference expression string comprises zero or more directives,
    where each directive is separated by a COMMA ("," or U+2C).
 
-2.1.  Preference
+3.1.  Preference
 
    Each preference consists of a label, an EQUALS character ("=" or
    U+3D), and value of either "y" (U+79) or "n" (U+6E).
@@ -177,15 +208,15 @@ Table of Contents
    (U+9) -- are ignored to make authoring easier.  Whitespace is ignored
    before and after both labels and values.
 
-2.2.  Labels
+3.2.  Labels
 
    Each label describes how an automaton might use content.  A set of
-   core labels is defined in this document; see Section 3.
+   core labels is defined in this document; see Section 4.
 
    A label that is not understood by an automaton are ignored.
    Similarly, labels that do not apply to a usage are ignored.
 
-2.3.  Values
+3.3.  Values
 
    Each preference includes one of two values: "y" or "n".
 
@@ -199,10 +230,10 @@ Table of Contents
 
    Any other value causes a preference to be ignored.
 
-2.4.  Duplicated Labels
+3.4.  Duplicated Labels
 
    Preferences with duplicated labels are permitted.  This can happen
-   when multiple preference expressions are combined; see Section 4.4.
+   when multiple preference expressions are combined; see Section 5.4.
 
    If multiple preferences include the same label, any preference with a
    value of "n" applies.  Failing that, any preference with a value of
@@ -218,7 +249,7 @@ Table of Contents
    preference expression string exceeds the length permitted by the
    automaton processing it.
 
-2.5.  Specificity
+3.5.  Specificity
 
    A label might be defined to be more specific than another label.
 
@@ -233,7 +264,7 @@ Table of Contents
    The order of preferences and the presence of invalid values has no
    effect on the outcome.
 
-3.  Usage Labels
+4.  Usage Labels
 
    This section defines a limited taxonomy of usages, with just the
    following broad usage labels:
@@ -264,7 +295,7 @@ Table of Contents
       |  Note that although search applications often use machine
       |  learning, "search" is not more specific than the "ai" label.
 
-3.1.  Defining New Labels
+4.1.  Defining New Labels
 
    The set of labels can be expanded, but the core set is intended to be
    small.  The most important goal is to ensure that each label is
@@ -306,18 +337,18 @@ Table of Contents
    safely used.  Otherwise, there is a risk that automatons infer
    permission based on more general preferences.
 
-   Section 7 describes a process for registering new labels.
+   Section 8 describes a process for registering new labels.
 
-3.2.  Label Characters
+4.2.  Label Characters
 
    A preference expression cannot include certain characters when
-   carried in specific protocols (see Section 5):
+   carried in specific protocols (see Section 6):
 
    *  A "#" (U+23) character is interpreted as a line ending in the
-      "robots.txt" format Section 5.1.
+      "robots.txt" format Section 6.1.
 
    *  The structured field dictionaries used for the auto-usage field in
-      HTTP Section 5.2 limit character repertoire to lowercase
+      HTTP Section 6.2 limit character repertoire to lowercase
       alphabetic characters ("a" through "z"), digits ("0" through "9"),
       "_", "-", ".", and "*".
 
@@ -325,7 +356,7 @@ Table of Contents
    any new labels intended for wide compatibility SHOULD use only
    lowercase alphabetical characters.
 
-4.  Processing Preference Expression Strings
+5.  Processing Preference Expression Strings
 
    This section details an example algorithm for processing of
    preference expressions.
@@ -337,14 +368,14 @@ Table of Contents
 
    1.  The automaton parses the preference expression and produces a
        record of values for each label known to it following the process
-       in Section 4.1.
+       in Section 5.1.
 
    2.  The automaton selects the labels that apply to its current usage,
        including labels at all levels of generality.  These are passed
-       to the determination process in Section 4.2 to determine whether
+       to the determination process in Section 5.2 to determine whether
        the usage is ALLOWED or DENIED.
 
-4.1.  Parsing
+5.1.  Parsing
 
    The process of parsing a preference expression and updating the
    record of values, is as follows:
@@ -381,7 +412,7 @@ Table of Contents
        current record for the corresponding label is not set, that
        record is set to YES.
 
-4.2.  Determination
+5.2.  Determination
 
    When values have been recorded for known labels, the automaton
    selects the labels that applies to a specific usage.
@@ -415,7 +446,7 @@ Table of Contents
    In addition to understanding which labels apply to a given usage,
    automatons need to have a default policy for each of those labels.
 
-4.3.  Optimization and Length Limits
+5.3.  Optimization and Length Limits
 
    The parsing of preference expressions can be implemented in a
    streaming fashion, requiring minimal state beyond that needed to
@@ -426,75 +457,89 @@ Table of Contents
    expressions at any point once at least 1000 characters have been
    processed.
 
-4.4.  Multiple Preference Expressions
+5.4.  Multiple Preference Expressions
 
    An automaton that is consuming content might encounter multiple
    preference expressions that relate to the same piece of content.  For
    example, preference expressions might be carried by both "robots.txt"
-   (Section 5.1) and content metadata (Section 5.3).
+   (Section 6.1) and content metadata (Section 6.3).
 
    Multiple preference expressions can be combined by simple
    concatenation in any order.  A single comma (",") is inserted between
    each expression.
 
-   For an identical outcome, the parsing process (Section 4.1) can be
+   For an identical outcome, the parsing process (Section 5.1) can be
    run separately for each expression, updating the same record of
    values rather than starting anew for each.
 
-4.5.  Multiple Usages
+5.5.  Multiple Usages
 
    An automaton that might use content for multiple purposes can parse
    preference expressions once.
 
-   The parsing process (Section 4.1) can be run, recording the value of
+   The parsing process (Section 5.1) can be run, recording the value of
    all labels that apply to any of the potential usages.
 
    The state that is produced from parsing can be retained and applied
-   (Section 4.2) to each different usage.
+   (Section 5.2) to each different usage.
 
-5.  Carrying Preference Expressions
+6.  Carrying Preference Expressions
 
    A preference expression might be propagated by multiple different
    mechanisms.  This provides content creators and distributors choice
    in how they manage the signaling of their preferences.
 
-5.1.  The robots.txt Format
+6.1.  The "robots.txt" Format
 
-   The robots.txt file [ROBOTS], also known as the Robots Exclusion
-   Protocol, provides automated crawlers with information about what
-   resources can be gathered.
+   Use of "robots.txt" , or the Robots Exclusion Protocol [ROBOTS],
+   provides automated crawlers with information about what resources can
+   be gathered.
 
    This is a file that is served in a well-known location by HTTP
    servers.
 
    An extension is defined for this format to allow for carrying simple
-   usage preference strings.  A rule name of "usage-pref" is added to
-   each group, appearing between the startgroupline and rule lines as
+   usage preference strings.  A rule name of "usage" is added to each
+   group, appearing between the startgroupline and rule lines as
    follows:
 
    group = startgroupline
            *(startgroupline / emptyline)
            *(usage / emptyline)
            *(rule / emptyline)
-   usage = *WS "usage-pref" *WS ":" *UTF8-char-noctl EOL
+   usage = *WS "usage" *WS ":" *UTF8-char-noctl EOL
 
    Notes:
 
-   *  The label "usage-pref" is case insentive, but the usage preference
+   *  The label "usage" is case insentive, but the usage preference
       string is case sensitive.
 
    *  Preference expressions will be truncated at the first "#"
-      character (U+23); see Section 3.2.
+      character (U+23); see Section 4.2.
 
-5.2.  HTTP Header Field
+6.2.  HTTP Header Field
 
-   An HTTP Response Header field called Usage-Pref is defined.
+   An HTTP Response Header field called Content-Usage is defined.
 
    This field is defined as a structured field dictionary, as defined in
    Section 3.2 of [RFC9651].
 
    Dictionary members MUST all include a single token value
    (Section 3.3.4 of [RFC9651]) that is either "y" or "n".
+
+   The Content-Usage field applies to the content of a request or
+   response, not the resource or representation.
+
+   The Content-Usage field can be used in requests to have the
+   preference apply to the content of the request.  Servers could retain
+   a copy of preferences if the content of a request is used to answer
+   later requests.  For example, the content of a PUT request that is
+   used to answer subsequent GET requests.  Servers SHOULD reject
+   requests that include Content-Usage unless the same or compatible
+   preferences can be provided to entities that might obtain the
+   included content.
+
+   Content-Usage does not have any special effect on caching.
 
    The value of this field MAY be first parsed using a structured field
    parser.  This implies the following restrictions:
@@ -504,12 +549,11 @@ Table of Contents
       additional space MUST be removed before creating the field.
 
    *  Dictionary members are tokens, not Booleans (Section 3.3.6 of
-      [RFC9651]).  This means that members with no value or a value of
-      "?1" MUST be ignored.
+      [RFC9651]).  Boolean members MUST be ignored.
 
    *  Dictionary members with parameters MUST be ignored.
 
-5.3.  Content Metadata
+6.3.  Content Metadata
 
    Specific formats can define how preference expressions are carried in
    content metadata.
@@ -519,7 +563,7 @@ Table of Contents
       |  Question: Should we define how to use HTML meta, or rely on
       |  http-equiv?
 
-6.  Security Considerations
+7.  Security Considerations
 
    This document defines a preference mechanism, not a security feature.
 
@@ -534,11 +578,16 @@ Table of Contents
    *  denial of service, where malicious input is constructed to be
       difficult to process in order to exhaust resources
 
-   The algorithms in Section 4 are not immune to these issues if
+   The algorithms in Section 5 are not immune to these issues if
    incautiously implemented by an automaton.  They are exemplary only
    and are biased toward being comprehensible rather than being secure.
 
-7.  IANA Considerations
+8.  IANA Considerations
+
+   This document defines a new registry for labels (Section 8.1) and an
+   HTTP header field (Section 8.2).
+
+8.1.  Preference Label Registry
 
    This document establishes a registry that lists Labels for Preference
    Expressions for Automated Use of Content with IANA.  The policy for
@@ -547,7 +596,7 @@ Table of Contents
    Each entry has the following fields:
 
    Label:
-      a Unicode string (see Section 3.1 for advice on selecting values)
+      a Unicode string (see Section 4.1 for advice on selecting values)
    Definition:
       a short description of the automated usage that the label applies
       to
@@ -565,11 +614,11 @@ Table of Contents
    Contact:
       contact details for the registrant
 
-7.1.  Registration Guidance
+8.1.1.  Registration Guidance
 
    An ideal label for a new registration is short, descriptive, and
    memorable.  Lowercase characters (U+61 through U+7A) are most
-   compatible; see Section 3.2.
+   compatible; see Section 4.2.
 
    Provisional registrations can be used by entities other than a change
    controller to register labels in order to avoid registration
@@ -594,10 +643,10 @@ Table of Contents
 
    Expert decisions can be appealed to the IESG.
 
-7.2.  Initial Registry Contents
+8.1.2.  Initial Registry Contents
 
    Table 2 tabulates the other fields for registrations of labels from
-   Section 2.2.
+   Section 3.2.
 
         +========+=====================================+=========+
         | Label  | Definition                          | Narrows |
@@ -626,9 +675,26 @@ Table of Contents
    Change Controller:  IETF
    Contact:  IETF AI-PREF WG (ai-control@ietf.org)
 
-8.  References
+8.2.  HTTP Content-Usage Field Registration
 
-8.1.  Normative References
+   An HTTP field named Content-Usage is registered in the Hypertext
+   Transfer Protocol (HTTP) Field Name Registry, following the
+   procedures in Section 18.4 of [HTTP].  The following values are
+   registered:
+
+   Field Name:  Content-Usage
+   Status:  permanent
+   Reference:  this document
+   Comments:  (none)
+
+9.  References
+
+9.1.  Normative References
+
+   [HTTP]     Fielding, R., Ed., Nottingham, M., Ed., and J. Reschke,
+              Ed., "HTTP Semantics", STD 97, RFC 9110,
+              DOI 10.17487/RFC9110, June 2022,
+              <https://www.rfc-editor.org/rfc/rfc9110>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -653,7 +719,7 @@ Table of Contents
               DOI 10.17487/RFC9309, September 2022,
               <https://www.rfc-editor.org/rfc/rfc9309>.
 
-8.2.  Informative References
+9.2.  Informative References
 
    [REP-PURPOSE]
               Illyes, G., "Robots Exclusion Protocol User Agent Purpose
