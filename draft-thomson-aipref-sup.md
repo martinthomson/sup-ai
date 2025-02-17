@@ -798,8 +798,8 @@ Comments:
 
 This document is informed by discussions at the AI-CONTROL workshop.
 
-Drafts from Gary Ilyes ({{?REP-PURPOSE=I-D.illyes-rep-purpose}}
-and Thom Vaughan {{?VOCAB=I-D.vaughan-aipref-vocab}}
+Drafts from Gary Ilyes ({{?REP-PURPOSE=I-D.illyes-rep-purpose}})
+and Thom Vaughan ({{?VOCAB=I-D.vaughan-aipref-vocab}})
 helped inform some of the choices.
 This document aims to be more complete than the former
 and simpler than the latter.
