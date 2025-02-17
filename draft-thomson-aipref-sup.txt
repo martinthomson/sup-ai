@@ -393,12 +393,12 @@ Table of Contents
    The process of parsing a preference expression and updating the
    record of values, is as follows:
 
-   1.  The automaton initializes a record one variable for each of the
-       labels that is known to it with a value of UNKNOWN.  Include
-       labels in this record that are more general, even if the specific
-       usage is properly described by that subset (for example, include
-       "tdm" in addition to "search" for a simple search indexing
-       function).
+   1.  The automaton initializes a record that contains one value for
+       each of the labels that is known to it.  Each label is assigned
+       an initial value of UNKNOWN.  Include labels in this record that
+       are more general, even if the specific usage is properly
+       described by that subset (for example, include "tdm" in addition
+       to "search" for a simple search indexing function).
 
    2.  The expression is split into a sequence of preferences by
        splitting the string at each COMMA (",", U+2C).
@@ -422,7 +422,7 @@ Table of Contents
        for that the corresponding label is set to NO.
 
        e.  If the value is the string "y" (a single U+79), and the
-       current record for the corresponding label is not set, that
+       current record for the corresponding label is UNKNOWN, that
        record is set to YES.
 
 5.2.  Determination

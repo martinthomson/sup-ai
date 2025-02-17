@@ -1696,9 +1696,9 @@ to determine whether the usage is ALLOWED or DENIED.<a href="#section-5-3.2.1" c
 and updating the record of values, is as follows:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.1-2">
 <li id="section-5.1-2.1">
-            <p id="section-5.1-2.1.1">The automaton initializes a record one variable
-for each of the labels that is known to it
-with a value of UNKNOWN.
+            <p id="section-5.1-2.1.1">The automaton initializes a record that contains
+one value for each of the labels that is known to it.
+Each label is assigned an initial value of UNKNOWN.
 Include labels in this record
 that are more general,
 even if the specific usage is properly described by that subset
@@ -1728,7 +1728,7 @@ d. If the value is the string "n" (a single U+6E),
    the record for that the corresponding label is set to NO.<a href="#section-5.1-2.3.5" class="pilcrow">¶</a></p>
 <p id="section-5.1-2.3.6">
 e. If the value is the string "y" (a single U+79),
-   and the current record for the corresponding label is not set,
+   and the current record for the corresponding label is UNKNOWN,
    that record is set to YES.<a href="#section-5.1-2.3.6" class="pilcrow">¶</a></p>
 </li>
         </ol>
