@@ -406,24 +406,24 @@ Table of Contents
    3.  Each preference is then processed in turn:
 
        a.  The preference is split into a label and a value at the first
-       EQUALS ("=", U+3D).  Preferences that do not contain an EQUALS
-       ("=", U+3D) are skipped and processing continues with the next
-       preference.
+           EQUALS ("=", U+3D).  Preferences that do not contain an
+           EQUALS ("=", U+3D) are skipped and processing continues with
+           the next preference.
 
        b.  Spaces (U+20) and tabs (U+9) are trimmed from the start and
-       end of each label and value.  (ISSUE: move this up a step for SF
-       compatibility and easier parsing?)
+           end of each label and value.  (ISSUE: move this up a step for
+           SF compatibility and easier parsing?)
 
        c.  If the label is not understood by the automaton or the label
-       does not apply to the current usage, it is ignored and the
-       processing continues with the next preference.
+           does not apply to the current usage, it is ignored and the
+           processing continues with the next preference.
 
        d.  If the value is the string "n" (a single U+6E), the record
-       for that the corresponding label is set to NO.
+           for that the corresponding label is set to NO.
 
        e.  If the value is the string "y" (a single U+79), and the
-       current record for the corresponding label is UNKNOWN, that
-       record is set to YES.
+           current record for the corresponding label is UNKNOWN, that
+           record is set to YES.
 
 5.2.  Determination
 
@@ -440,11 +440,11 @@ Table of Contents
        value for each label.
 
        a.  For each of the labels that are more specific than this
-       label, replace any value of UNKNOWN for that more specific label
-       with the value from this (more general) label.
+           label, replace any value of UNKNOWN for that more specific
+           label with the value from this (more general) label.
 
        b.  If all aspects of the usage are covered by more specific
-       labels discard the more general label from the record.
+           labels discard the more general label from the record.
 
    2.  If the value for any of the remaining labels is UNKNOWN, the
        automaton substitutes a YES or NO value based on its configured

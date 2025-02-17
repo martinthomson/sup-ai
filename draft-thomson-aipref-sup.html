@@ -1710,26 +1710,33 @@ by splitting the string at each COMMA (",", U+2C).<a href="#section-5.1-2.2.1" c
 </li>
           <li id="section-5.1-2.3">
             <p id="section-5.1-2.3.1">Each preference is then processed in turn:<a href="#section-5.1-2.3.1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2.3.2">
-a. The preference is split into a label and a value
-   at the first EQUALS ("=", U+3D).
-   Preferences that do not contain an EQUALS ("=", U+3D) are skipped
-   and processing continues with the next preference.<a href="#section-5.1-2.3.2" class="pilcrow">¶</a></p>
-<p id="section-5.1-2.3.3">
-b. Spaces (U+20) and tabs (U+9) are trimmed from the start and end
-   of each label and value.
-   (ISSUE: move this up a step for SF compatibility and easier parsing?)<a href="#section-5.1-2.3.3" class="pilcrow">¶</a></p>
-<p id="section-5.1-2.3.4">
-c. If the label is not understood by the automaton
-   or the label does not apply to the current usage,
-   it is ignored and the processing continues with the next preference.<a href="#section-5.1-2.3.4" class="pilcrow">¶</a></p>
-<p id="section-5.1-2.3.5">
-d. If the value is the string "n" (a single U+6E),
-   the record for that the corresponding label is set to NO.<a href="#section-5.1-2.3.5" class="pilcrow">¶</a></p>
-<p id="section-5.1-2.3.6">
-e. If the value is the string "y" (a single U+79),
-   and the current record for the corresponding label is UNKNOWN,
-   that record is set to YES.<a href="#section-5.1-2.3.6" class="pilcrow">¶</a></p>
+<ol start="1" type="a" class="normal type-a" id="section-5.1-2.3.2">
+<li id="section-5.1-2.3.2.1">
+                <p id="section-5.1-2.3.2.1.1">The preference is split into a label and a value
+at the first EQUALS ("=", U+3D).
+Preferences that do not contain an EQUALS ("=", U+3D) are skipped
+and processing continues with the next preference.<a href="#section-5.1-2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-5.1-2.3.2.2">
+                <p id="section-5.1-2.3.2.2.1">Spaces (U+20) and tabs (U+9) are trimmed from the start and end
+of each label and value.
+(ISSUE: move this up a step for SF compatibility and easier parsing?)<a href="#section-5.1-2.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-5.1-2.3.2.3">
+                <p id="section-5.1-2.3.2.3.1">If the label is not understood by the automaton
+or the label does not apply to the current usage,
+it is ignored and the processing continues with the next preference.<a href="#section-5.1-2.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-5.1-2.3.2.4">
+                <p id="section-5.1-2.3.2.4.1">If the value is the string "n" (a single U+6E),
+the record for that the corresponding label is set to NO.<a href="#section-5.1-2.3.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-5.1-2.3.2.5">
+                <p id="section-5.1-2.3.2.5.1">If the value is the string "y" (a single U+79),
+and the current record for the corresponding label is UNKNOWN,
+that record is set to YES.<a href="#section-5.1-2.3.2.5.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
 </li>
         </ol>
 </section>
@@ -1752,15 +1759,19 @@ according to a preference expression.<a href="#section-5.2-3" class="pilcrow">¶
 <li id="section-5.2-4.1">
             <p id="section-5.2-4.1.1">Starting with the most general labels,
 iterate over the recorded value for each label.<a href="#section-5.2-4.1.1" class="pilcrow">¶</a></p>
-<p id="section-5.2-4.1.2">
-a. For each of the labels
-   that are more specific than this label,
-   replace any value of UNKNOWN for that more specific label
-   with the value from this (more general) label.<a href="#section-5.2-4.1.2" class="pilcrow">¶</a></p>
-<p id="section-5.2-4.1.3">
-b. If all aspects of the usage
-   are covered by more specific labels
-   discard the more general label from the record.<a href="#section-5.2-4.1.3" class="pilcrow">¶</a></p>
+<ol start="1" type="a" class="normal type-a" id="section-5.2-4.1.2">
+<li id="section-5.2-4.1.2.1">
+                <p id="section-5.2-4.1.2.1.1">For each of the labels
+that are more specific than this label,
+replace any value of UNKNOWN for that more specific label
+with the value from this (more general) label.<a href="#section-5.2-4.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-5.2-4.1.2.2">
+                <p id="section-5.2-4.1.2.2.1">If all aspects of the usage
+are covered by more specific labels
+discard the more general label from the record.<a href="#section-5.2-4.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
 </li>
           <li id="section-5.2-4.2">
             <p id="section-5.2-4.2.1">If the value for any of the remaining labels is UNKNOWN,
