@@ -1,5 +1,6 @@
 ---
-title: "Short Usage Preference Strings for AI"
+title: "Short Usage Preference Strings for Automated Processing"
+shortname: "Short Usage Strings for AI"
 category: std
 
 docname: draft-thomson-aipref-sup-latest
