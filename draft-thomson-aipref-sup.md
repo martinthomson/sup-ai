@@ -386,9 +386,9 @@ to determine whether a particular usage is ALLOWED or DENIED according to that e
 The process of parsing a preference expression
 and updating the record of values, is as follows:
 
-1. The automaton initializes a record one variable
-   for each of the labels that is known to it
-   with a value of UNKNOWN.
+1. The automaton initializes a record that contains
+   one value for each of the labels that is known to it.
+   Each label is assigned an initial value of UNKNOWN.
    Include labels in this record
    that are more general,
    even if the specific usage is properly described by that subset
@@ -416,7 +416,7 @@ and updating the record of values, is as follows:
       the record for that the corresponding label is set to NO.
 
    e. If the value is the string "y" (a single U+79),
-      and the current record for the corresponding label is not set,
+      and the current record for the corresponding label is UNKNOWN,
       that record is set to YES.
 
 
