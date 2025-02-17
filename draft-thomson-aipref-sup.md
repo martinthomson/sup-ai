@@ -1,6 +1,6 @@
 ---
 title: "Short Usage Preference Strings for Automated Processing"
-shortname: "Short Usage Strings for AI"
+abbrev: "Short Usage Strings for AI"
 category: std
 
 docname: draft-thomson-aipref-sup-latest
@@ -76,6 +76,9 @@ This format seeks to be:
 * Simple to understand and create
 * Straightforward to consume
 * Easily conveyed in multiple ways
+
+The document defines extensions to "robots.txt" {{!ROBOTS}} and HTTP {{!HTTP}}
+for making preferences available to automated processing systems.
 
 
 ## Applicability
@@ -279,6 +282,7 @@ search:
   of content for developing a search index
   and the use of those indexes to find content.
   The "search" label is more specific than "tdm".
+{: newline="true"}
 
 {:aside}
 > Note that although search applications often use machine learning,
@@ -345,6 +349,13 @@ when carried in specific protocols (see {{carriage}}):
   lowercase alphabetic characters ("a" through "z"),
   digits ("0" through "9"),
   "_", "-", ".", and "*".
+
+* Line ending characters (U+10 and U+13)
+  and control characters (U+00 through U+31)
+  are not special in this format.
+  However, some systems could be incapable of
+  authoring, conveying, or rendering them
+  without alteration.
 
 The format does not prohibit the use of these characters.
 However, any new labels intended for wide compatibility
@@ -522,17 +533,19 @@ group = startgroupline
         *(startgroupline / emptyline)
         *(usage / emptyline)
         *(rule / emptyline)
-usage = *WS "usage" *WS ":" *UTF8-char-noctl EOL
+usage = *WS "usage" *WS ":" usage-pref-exp EOL
+usage-pref-exp = *UTF8-char-noctl
 ~~~
 
 Notes:
 
 * The label "usage" is case insentive,
-  but the usage preference string is case sensitive.
+  but the preference expression is case sensitive.
 
 * Preference expressions will be truncated
   at the first "#" character (U+23);
   see {{new-chars}}.
+  Labels that include this character can be omitted.
 
 
 ## HTTP Header Field {#http}
@@ -559,6 +572,8 @@ to answer subsequent GET requests.
 Servers SHOULD reject requests that include Content-Usage
 unless the same or compatible preferences can be provided
 to entities that might obtain the included content.
+Obviously, servers that have not been updated
+to this specification will not.
 
 Content-Usage does not have any special effect on caching.
 
