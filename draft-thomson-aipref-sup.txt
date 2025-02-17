@@ -9,7 +9,7 @@ Intended status: Standards Track
 Expires: 21 August 2025
 
 
-                 Short Usage Preference Strings for AI
+        Short Usage Preference Strings for Automated Processing
                     draft-thomson-aipref-sup-latest
 
 Abstract
@@ -133,6 +133,10 @@ Table of Contents
    *  Straightforward to consume
 
    *  Easily conveyed in multiple ways
+
+   The document defines extensions to "robots.txt" [ROBOTS] and HTTP
+   [HTTP] for making preferences available to automated processing
+   systems.
 
 1.1.  Applicability
 
@@ -269,27 +273,31 @@ Table of Contents
    This section defines a limited taxonomy of usages, with just the
    following broad usage labels:
 
-   tdm:  The "tdm" label relates to all forms of automated processing of
+   tdm:
+      The "tdm" label relates to all forms of automated processing of
       content.  The acronym TDM stands for "text and data mining".  This
       is a broad category that refers to the practice of the automated
       extraction of any sort of information from content.
 
-   ai:  The "ai" label describes usage for all forms of artificial
+   ai:
+      The "ai" label describes usage for all forms of artificial
       intelligence or machine learning.  This includes both the training
       of models using the content and the use of a model that has been
       trained using the content.  The "ai" label is more specific than
       "tdm".
 
-   genai:  The "genai" label describes usage for artificial intelligence
-      or machine learning models that are able to produce content.  That
+   genai:
+      The "genai" label describes usage for artificial intelligence or
+      machine learning models that are able to produce content.  That
       content does not need to be similar in form to the content that a
       preference expression is applied.  This includes both the training
       of models using the content and the use of a model that has been
       trained using the content.  The "genai" label is more specific
       than "ai".
 
-   search:  The "search" label describes a use of content for developing
-      a search index and the use of those indexes to find content.  The
+   search:
+      The "search" label describes a use of content for developing a
+      search index and the use of those indexes to find content.  The
       "search" label is more specific than "tdm".
 
       |  Note that although search applications often use machine
@@ -351,6 +359,11 @@ Table of Contents
       HTTP Section 6.2 limit character repertoire to lowercase
       alphabetic characters ("a" through "z"), digits ("0" through "9"),
       "_", "-", ".", and "*".
+
+   *  Line ending characters (U+10 and U+13) and control characters
+      (U+00 through U+31) are not special in this format.  However, some
+      systems could be incapable of authoring, conveying, or rendering
+      them without alteration.
 
    The format does not prohibit the use of these characters.  However,
    any new labels intended for wide compatibility SHOULD use only
@@ -507,15 +520,17 @@ Table of Contents
            *(startgroupline / emptyline)
            *(usage / emptyline)
            *(rule / emptyline)
-   usage = *WS "usage" *WS ":" *UTF8-char-noctl EOL
+   usage = *WS "usage" *WS ":" usage-pref-exp EOL
+   usage-pref-exp = *UTF8-char-noctl
 
    Notes:
 
-   *  The label "usage" is case insentive, but the usage preference
-      string is case sensitive.
+   *  The label "usage" is case insentive, but the preference expression
+      is case sensitive.
 
    *  Preference expressions will be truncated at the first "#"
-      character (U+23); see Section 4.2.
+      character (U+23); see Section 4.2.  Labels that include this
+      character can be omitted.
 
 6.2.  HTTP Header Field
 
@@ -537,7 +552,8 @@ Table of Contents
    used to answer subsequent GET requests.  Servers SHOULD reject
    requests that include Content-Usage unless the same or compatible
    preferences can be provided to entities that might obtain the
-   included content.
+   included content.  Obviously, servers that have not been updated to
+   this specification will not.
 
    Content-Usage does not have any special effect on caching.
 
@@ -581,6 +597,12 @@ Table of Contents
    The algorithms in Section 5 are not immune to these issues if
    incautiously implemented by an automaton.  They are exemplary only
    and are biased toward being comprehensible rather than being secure.
+
+   Preference strings could include characters that can create confusing
+   or misleading renderings.  For instance, invisible characters or U+8
+   (backspace) could be used to create a misleading representation.
+   These characters can be avoided when authoring preference expressions
+   and replaced when displaying them (using U+FFFD for example).
 
 8.  IANA Considerations
 
