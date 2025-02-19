@@ -289,6 +289,26 @@ search:
   "search" is not more specific than the "ai" label.
 
 
+## Ambiguity
+
+The applications that might use data are not always easily classified.
+Ultimately, classification of a particular application
+under established labels
+could be ambiguous.
+Some applications might best be classified using two or more labels.
+This determination needs to be made
+by those developing and operating each application.
+
+Applications can be classified as having multiple applicable labels.
+In those cases, the algorithm described in {{determination}}
+will return a result of DENIED if any label has a value of "n".
+
+Where applications use data in multiple ways,
+it might be possible to split that usage
+so that each separate use can look at fewer labels;
+see {{multi}}.
+
+
 ## Defining New Labels {#new}
 
 The set of labels can be expanded,
@@ -600,7 +620,9 @@ This implies the following restrictions:
 Specific formats can define how preference expressions
 are carried in content metadata.
 
-This document does not define any such format.
+Preference expressions are designed to be included in content metadata.
+This document does not define any such format,
+leaving that to the definition of specific media formats.
 
 {:aside}
 > Question:
@@ -774,19 +796,15 @@ following the procedures in {{Section 18.4 of !HTTP=RFC9110}}.
 The following values are registered:
 
 Field Name:
-
 : Content-Usage
 
 Status:
-
 : permanent
 
 Reference:
-
 : this document
 
 Comments:
-
 : (none)
 {: spacing="compact"}
 
