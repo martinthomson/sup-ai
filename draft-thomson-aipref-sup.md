@@ -300,7 +300,7 @@ This determination needs to be made
 by those developing and operating each application.
 
 Applications can be classified as having multiple applicable labels.
-In those cases, the algorithm described in {{determination}}
+In those cases, the algorithm described in {{deter}}
 will return a result of DENIED if any label has a value of "n".
 
 Where applications use data in multiple ways,
