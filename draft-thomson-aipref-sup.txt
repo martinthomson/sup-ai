@@ -4,9 +4,9 @@
 
 AI Preferences                                                M. Thomson
 Internet-Draft                                                   Mozilla
-Updates: 9309 (if approved)                             17 February 2025
+Updates: 9309 (if approved)                             19 February 2025
 Intended status: Standards Track                                        
-Expires: 21 August 2025
+Expires: 23 August 2025
 
 
         Short Usage Preference Strings for Automated Processing
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 August 2025.
+   This Internet-Draft will expire on 23 August 2025.
 
 Copyright Notice
 
@@ -82,8 +82,9 @@ Table of Contents
      3.4.  Duplicated Labels
      3.5.  Specificity
    4.  Usage Labels
-     4.1.  Defining New Labels
-     4.2.  Label Characters
+     4.1.  Ambiguity
+     4.2.  Defining New Labels
+     4.3.  Label Characters
    5.  Processing Preference Expression Strings
      5.1.  Parsing
      5.2.  Determination
@@ -180,7 +181,7 @@ Table of Contents
 
    404 Not Found
    Date: Mon, 17 Feb 2025 03:32:05 GMT
-   Usage-Pref: tdm=y,ai=n
+   Content-Usage: tdm=y,ai=n
    Content-Type: text/html
 
    <HTML page contents omitted from this example>
@@ -190,7 +191,7 @@ Table of Contents
    for all resources with a path that starts with "/article/":
 
    User-Agent: *
-   Usage-Pref: tdm=n,search=y
+   Usage: tdm=n,search=y
    Allow: /article/
 
 3.  Preference Expression Strings
@@ -303,7 +304,23 @@ Table of Contents
       |  Note that although search applications often use machine
       |  learning, "search" is not more specific than the "ai" label.
 
-4.1.  Defining New Labels
+4.1.  Ambiguity
+
+   The applications that might use data are not always easily
+   classified.  Ultimately, classification of a particular application
+   under established labels could be ambiguous.  Some applications might
+   best be classified using two or more labels.  This determination
+   needs to be made by those developing and operating each application.
+
+   Applications can be classified as having multiple applicable labels.
+   In those cases, the algorithm described in Section 5.2 will return a
+   result of DENIED if any label has a value of "n".
+
+   Where applications use data in multiple ways, it might be possible to
+   split that usage so that each separate use can look at fewer labels;
+   see Section 5.5.
+
+4.2.  Defining New Labels
 
    The set of labels can be expanded, but the core set is intended to be
    small.  The most important goal is to ensure that each label is
@@ -347,7 +364,7 @@ Table of Contents
 
    Section 8 describes a process for registering new labels.
 
-4.2.  Label Characters
+4.3.  Label Characters
 
    A preference expression cannot include certain characters when
    carried in specific protocols (see Section 6):
@@ -529,7 +546,7 @@ Table of Contents
       is case sensitive.
 
    *  Preference expressions will be truncated at the first "#"
-      character (U+23); see Section 4.2.  Labels that include this
+      character (U+23); see Section 4.3.  Labels that include this
       character can be omitted.
 
 6.2.  HTTP Header Field
@@ -574,7 +591,9 @@ Table of Contents
    Specific formats can define how preference expressions are carried in
    content metadata.
 
-   This document does not define any such format.
+   Preference expressions are designed to be included in content
+   metadata.  This document does not define any such format, leaving
+   that to the definition of specific media formats.
 
       |  Question: Should we define how to use HTML meta, or rely on
       |  http-equiv?
@@ -618,7 +637,7 @@ Table of Contents
    Each entry has the following fields:
 
    Label:
-      a Unicode string (see Section 4.1 for advice on selecting values)
+      a Unicode string (see Section 4.2 for advice on selecting values)
    Definition:
       a short description of the automated usage that the label applies
       to
@@ -640,7 +659,7 @@ Table of Contents
 
    An ideal label for a new registration is short, descriptive, and
    memorable.  Lowercase characters (U+61 through U+7A) are most
-   compatible; see Section 4.2.
+   compatible; see Section 4.3.
 
    Provisional registrations can be used by entities other than a change
    controller to register labels in order to avoid registration
