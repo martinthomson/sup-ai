@@ -135,7 +135,7 @@ see {{http}}.
 ~~~http-message
 404 Not Found
 Date: Mon, 17 Feb 2025 03:32:05 GMT
-Usage-Pref: tdm=y,ai=n
+Content-Usage: tdm=y,ai=n
 Content-Type: text/html
 
 <HTML page contents omitted from this example>
@@ -148,7 +148,7 @@ for all resources with a path that starts with "/article/":
 
 ~~~robots
 User-Agent: *
-Usage-Pref: tdm=n,search=y
+Usage: tdm=n,search=y
 Allow: /article/
 ~~~
 
