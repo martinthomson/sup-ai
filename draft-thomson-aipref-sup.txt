@@ -4,9 +4,9 @@
 
 AI Preferences                                                M. Thomson
 Internet-Draft                                                   Mozilla
-Updates: 9309 (if approved)                             19 February 2025
+Updates: 9309 (if approved)                             26 February 2025
 Intended status: Standards Track                                        
-Expires: 23 August 2025
+Expires: 30 August 2025
 
 
         Short Usage Preference Strings for Automated Processing
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 August 2025.
+   This Internet-Draft will expire on 30 August 2025.
 
 Copyright Notice
 
@@ -306,11 +306,13 @@ Table of Contents
 
 4.1.  Ambiguity
 
-   The applications that might use data are not always easily
-   classified.  Ultimately, classification of a particular application
-   under established labels could be ambiguous.  Some applications might
-   best be classified using two or more labels.  This determination
-   needs to be made by those developing and operating each application.
+   The determination about how to classify data use needs to be made by
+   those developing and operating each application.
+
+   How applications might use data is not always easily classified.
+   Ultimately, classification of a particular application under
+   established labels could be ambiguous.  Where there is ambiguity,
+   applications might best be classified using two or more labels.
 
    Applications can be classified as having multiple applicable labels.
    In those cases, the algorithm described in Section 5.2 will return a
