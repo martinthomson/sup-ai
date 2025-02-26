@@ -291,13 +291,15 @@ search:
 
 ## Ambiguity
 
-The applications that might use data are not always easily classified.
+The determination about how to classify data use needs to be made
+by those developing and operating each application.
+
+How applications might use data is not always easily classified.
 Ultimately, classification of a particular application
 under established labels
 could be ambiguous.
-Some applications might best be classified using two or more labels.
-This determination needs to be made
-by those developing and operating each application.
+Where there is ambiguity,
+applications might best be classified using two or more labels.
 
 Applications can be classified as having multiple applicable labels.
 In those cases, the algorithm described in {{deter}}
