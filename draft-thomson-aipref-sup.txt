@@ -649,7 +649,7 @@ Table of Contents
       a link to a publicly accessible specification that contains a more
       complete definition
    Status:
-      either is "provisional" or "permanent" (see below)
+      either "provisional" or "permanent" (see Section 8.1.1)
    Date:
       the date of the last update to the registration
    Change Controller:
