@@ -701,7 +701,7 @@ Specification:
 
 Status:
 
-: either is "provisional" or "permanent" (see below)
+: either "provisional" or "permanent" (see {{iana-guidance}})
 
 Date:
 
@@ -717,7 +717,7 @@ Contact:
 {: newline="true" spacing="compact"}
 
 
-### Registration Guidance
+### Registration Guidance {#iana-guidance}
 
 An ideal label for a new registration is
 short, descriptive, and memorable.
