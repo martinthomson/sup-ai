@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-09T01:18:55.796783+00:00",
+  "timestamp": "2025-03-11T01:39:11.894715+00:00",
   "repo": "martinthomson/sup-ai",
   "labels": [
     {
@@ -49,6 +49,55 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDON5XJEc6tLzPJ",
+      "title": "Agent browsing on behalf of a user action?",
+      "url": "https://github.com/martinthomson/sup-ai/issues/1",
+      "state": "OPEN",
+      "author": "mprorock",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "@martinthomson do you see this as a mechanism to indicate whether an agent can access the data on behalf of a user when directed by a user to do so?",
+      "createdAt": "2025-03-09T17:10:45Z",
+      "updatedAt": "2025-03-10T03:03:29Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "OWNER",
+          "body": "Are you talking about a typical user agent (i.e., a browser) or some new sort of agentic AI?  I don't think that applies here in either case, and so the agent would just be able to access the content.  But, if you are talking about the latter exclusively, which is AI and it is using the data, it's not entirely clear from what the draft includes.  Other similar systems separate out training and inference, where I chose not to, so this does create some ambiguity.\n\nClarifying that is a good idea, but I don't know which way this needs to point.  There's a lot riding on \"when directed by a user\" in your question.  That might mean that content is \"used\" by the person or it could be \"used\" by the agent, with the line between the two being pretty unclear.",
+          "createdAt": "2025-03-10T03:03:27Z",
+          "updatedAt": "2025-03-10T03:03:27Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "I_kwDON5XJEc6tL0Ir",
+      "title": "Consideration for a \"maybe\" rather than just yes/no prefs",
+      "url": "https://github.com/martinthomson/sup-ai/issues/2",
+      "state": "OPEN",
+      "author": "mprorock",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "@martinthomson would a value of \"l\" for \"subject to license\" make sense for a value?\nThis is more nuanced than just saying: no, it is basically a yes, but you must conform to certain rules that could be specified as a url contained in a \"License\" or \"Content-License\" header/section",
+      "createdAt": "2025-03-09T17:17:45Z",
+      "updatedAt": "2025-03-10T03:18:42Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "OWNER",
+          "body": "I see where you are going, but I don't see this as materially different than 'n'.  It is always possible to include licensing information that can override preferences.  In most cases, a URL won't help an automated processor decide whether it can use content, because licenses are often just a reference to a legal document.  Some URLs might reference structured content (or reference a document containing structured content) that an automaton can use.  Where URLs are effectively identifiers and the automaton is able to know that it complies with a license, that is maybe a case for this.\n\nIn all of these case, these decisions can be made without a specific signal here.  There are existing mechanisms for signaling licensing terms in the form of a URL.  Unfortunately, there are an awful lot of them, but these preferences would not override any established licensing terms, they would only apply where those terms either allowed it, where the automaton is unable to determine that it is compliant with terms, or where there are no terms.",
+          "createdAt": "2025-03-10T03:18:41Z",
+          "updatedAt": "2025-03-10T03:18:41Z"
+        }
+      ]
+    }
+  ],
   "pulls": []
 }
