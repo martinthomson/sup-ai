@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-11T01:39:11.894715+00:00",
+  "timestamp": "2025-03-13T01:39:57.563041+00:00",
   "repo": "martinthomson/sup-ai",
   "labels": [
     {
@@ -97,6 +97,38 @@
           "updatedAt": "2025-03-10T03:18:41Z"
         }
       ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDON5XJEc6tZViE",
+      "title": "Search?",
+      "url": "https://github.com/martinthomson/sup-ai/issues/3",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "The [openfuture report](https://openfuture.eu/wp-content/uploads/2025/03/250307_Vocabulary_for_opting_out_of_AI_training_and_other_forms_of_TDM.pdf) suggests that search might be best left out.  Their argument seems to reduce to \"it would be too hard\" combined with \"that system isn't broken\".  Both reasonable arguments.",
+      "createdAt": "2025-03-11T04:43:41Z",
+      "updatedAt": "2025-03-11T04:43:41Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDON5XJEc6tZYKq",
+      "title": "Including inference",
+      "url": "https://github.com/martinthomson/sup-ai/issues/4",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This draft takes the position that this is about *use*.  That follows the \"blurry JPEG of the internet\" view where the training is only a means to an end, that being inference.  In that view, if there is anything that someone might seek to avoid, that would not be the acquisition of information, but its ultimate use.  That is, an artist might be less concerned about something looking at a painting than having that painting -- or aspects of it -- copied.\n\nIn contrast, the [openfuture report](https://openfuture.eu/wp-content/uploads/2025/03/250307_Vocabulary_for_opting_out_of_AI_training_and_other_forms_of_TDM.pdf) takes the opposing view: that use in inference is distinct from training.  The report acknowledges that there might be a desire to constrain things like <acronym title=\"Retrieval Augmented Generation\">RAG</acronym> and that it might be necessary to expand the scope to include inference.  The obvious question there is whether the definition of existing categories can be expanded, or whether new categories would be needed.",
+      "createdAt": "2025-03-11T04:50:05Z",
+      "updatedAt": "2025-03-11T04:50:05Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": []
