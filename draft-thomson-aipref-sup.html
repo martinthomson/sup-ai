@@ -1774,51 +1774,51 @@ that record is set to YES.<a href="#section-5.1-2.3.2.5.1" class="pilcrow">¶</a
 <p id="section-5.2-1">When values have been recorded
 for known labels,
 the automaton selects the labels that applies to a specific usage.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">This includes more general labels.
-For example, a "genai" application
-would include both "ai" and "tdm" labels.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">The following process can be followed to determine
+<p id="section-5.2-2">The following process can be followed to determine
 whether that usage is ALLOWED or DENIED
-according to a preference expression.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-5.2-4">
-<li id="section-5.2-4.1">
-            <p id="section-5.2-4.1.1">Starting with the most general labels,
-iterate over the recorded value for each label.<a href="#section-5.2-4.1.1" class="pilcrow">¶</a></p>
-<ol start="1" type="a" class="normal type-a" id="section-5.2-4.1.2">
-<li id="section-5.2-4.1.2.1">
-                <p id="section-5.2-4.1.2.1.1">For each of the labels
-that are more specific than this label,
-replace any value of UNKNOWN for that more specific label
-with the value from this (more general) label.<a href="#section-5.2-4.1.2.1.1" class="pilcrow">¶</a></p>
+according to a preference expression.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.2-3">
+<li id="section-5.2-3.1">
+            <p id="section-5.2-3.1.1">For each label of interest to the application:<a href="#section-5.2-3.1.1" class="pilcrow">¶</a></p>
+<ol start="1" type="a" class="normal type-a" id="section-5.2-3.1.2">
+<li id="section-5.2-3.1.2.1">
+                <p id="section-5.2-3.1.2.1.1">If the value is UNKNOWN
+and there is a more general label,
+examine the value for that more general label.<a href="#section-5.2-3.1.2.1.1" class="pilcrow">¶</a></p>
+<ol start="1" type="i" class="normal type-i" id="section-5.2-3.1.2.1.2">
+<li id="section-5.2-3.1.2.1.2.1">
+                    <p id="section-5.2-3.1.2.1.2.1.1">If the more general label has a value that is not UNKNOWN,
+use that label instead.<a href="#section-5.2-3.1.2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-5.2-4.1.2.2">
-                <p id="section-5.2-4.1.2.2.1">If all aspects of the usage
-are covered by more specific labels
-discard the more general label from the record.<a href="#section-5.2-4.1.2.2.1" class="pilcrow">¶</a></p>
+                  <li id="section-5.2-3.1.2.1.2.2">
+                    <p id="section-5.2-3.1.2.1.2.2.1">Otherwise, repeat this process with the next more general label
+until either a value other than UNKNWON is encountered
+or there is no more general label.<a href="#section-5.2-3.1.2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ol>
+</li>
+              <li id="section-5.2-3.1.2.2">
+                <p id="section-5.2-3.1.2.2.1">If the value for the label is UNKNOWN,
+the automaton substitutes a YES or NO value
+based on its configured policy for missing preferences
+for the corresponding label.<a href="#section-5.2-3.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-5.2-3.1.2.3">
+                <p id="section-5.2-3.1.2.3.1">If the value for the label is NO,
+the usage is DENIED
+and the entire determination process ends.<a href="#section-5.2-3.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
-          <li id="section-5.2-4.2">
-            <p id="section-5.2-4.2.1">If the value for any of the remaining labels is UNKNOWN,
-the automaton substitutes a YES or NO value
-based on its configured policy for missing preferences
-for the corresponding label.<a href="#section-5.2-4.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-5.2-4.3">
-            <p id="section-5.2-4.3.1">If the value for any of the remaining labels is NO,
-resolve that the indicated preference
-regarding the usage
-is DENIED.<a href="#section-5.2-4.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li id="section-5.2-4.4">
-            <p id="section-5.2-4.4.1">Otherwise, resolve that the indicated preference
-regarding the usage
-is ALLOWED.<a href="#section-5.2-4.4.1" class="pilcrow">¶</a></p>
+          <li id="section-5.2-3.2">
+            <p id="section-5.2-3.2.1">Otherwise, all labels are YES
+and the indicated preference regarding the usage
+is ALLOWED.<a href="#section-5.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-5.2-5">In addition to understanding which labels apply to a given usage,
+<p id="section-5.2-4">In addition to understanding which labels apply to a given usage,
 automatons need to have a default policy
-for each of those labels.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+for each of those labels.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="optimization-and-length-limits">
