@@ -449,39 +449,36 @@ When values have been recorded
 for known labels,
 the automaton selects the labels that applies to a specific usage.
 
-This includes more general labels.
-For example, a "genai" application
-would include both "ai" and "tdm" labels.
-
 The following process can be followed to determine
 whether that usage is ALLOWED or DENIED
 according to a preference expression.
 
-1. Starting with the most general labels,
-   iterate over the recorded value for each label.
+1. For each label of interest to the application:
 
-   1. For each of the labels
-      that are more specific than this label,
-      replace any value of UNKNOWN for that more specific label
-      with the value from this (more general) label.
+   1. If the value is UNKNOWN
+      and there is a more general label,
+      examine the value for that more general label.
 
-   2. If all aspects of the usage
-      are covered by more specific labels
-      discard the more general label from the record.
+      1. If the more general label has a value that is not UNKNOWN,
+         use that label instead.
+
+      2. Otherwise, repeat this process with the next more general label
+         until either a value other than UNKNWON is encountered
+         or there is no more general label.
+      {: type="i"}
+
+   2. If the value for the label is UNKNOWN,
+      the automaton substitutes a YES or NO value
+      based on its configured policy for missing preferences
+      for the corresponding label.
+
+   3. If the value for the label is NO,
+      the usage is DENIED
+      and the entire determination process ends.
    {: type="a"}
 
-2. If the value for any of the remaining labels is UNKNOWN,
-   the automaton substitutes a YES or NO value
-   based on its configured policy for missing preferences
-   for the corresponding label.
-
-3. If the value for any of the remaining labels is NO,
-   resolve that the indicated preference
-   regarding the usage
-   is DENIED.
-
-4. Otherwise, resolve that the indicated preference
-   regarding the usage
+2. Otherwise, all labels are YES
+   and the indicated preference regarding the usage
    is ALLOWED.
 
 In addition to understanding which labels apply to a given usage,
