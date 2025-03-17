@@ -569,7 +569,8 @@ Notes:
 * Preference expressions will be truncated
   at the first "#" character (U+23);
   see {{new-chars}}.
-  Labels that include this character can be omitted.
+  Labels that include this character can be avoided
+  if this outcome is not desirable.
 
 
 ## HTTP Header Field {#http}
