@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-16T01:44:49.954803+00:00",
+  "timestamp": "2025-03-18T01:40:15.963584+00:00",
   "repo": "martinthomson/sup-ai",
   "labels": [
     {
@@ -128,6 +128,22 @@
       "createdAt": "2025-03-11T04:50:05Z",
       "updatedAt": "2025-03-11T04:50:05Z",
       "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDON5XJEc6uTA_m",
+      "title": "Invert determination algorithm",
+      "url": "https://github.com/martinthomson/sup-ai/issues/5",
+      "state": "CLOSED",
+      "author": "martinthomson",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This could be simpler:\nfor each label you care about, check the value; if YES, keep going, if NO, return DENIED, if UNKNOWN, recurse to the more specific label; if still UNKNOWN, pick a value according to local preference; when the loop ends without returning DENIED, return ALLOWED",
+      "createdAt": "2025-03-17T08:50:23Z",
+      "updatedAt": "2025-03-17T09:02:07Z",
+      "closedAt": "2025-03-17T09:02:07Z",
       "comments": []
     }
   ],
