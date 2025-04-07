@@ -14,7 +14,9 @@
 /.vscode/
 /lib
 /node_modules/
+/target
 /versioned/
+Cargo.lock
 Gemfile.lock
 archive.json
 draft-thomson-aicontrol-sup.xml
