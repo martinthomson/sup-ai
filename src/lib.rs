@@ -333,6 +333,27 @@ mod test {
     }
 
     #[test]
+    fn full() {
+        let mut up = UsagePreferences::default();
+        up.parse("genai=y,search=n,tdm=y,ai=n");
+        up.assert_allowed(TDM);
+        up.assert_denied(AI);
+        up.assert_allowed(GENAI);
+        up.assert_denied(SEARCH);
+    }
+
+    #[test]
+    fn full_split() {
+        let mut up = UsagePreferences::default();
+        up.parse("search=y,tdm=n");
+        up.parse("genai=n,ai=y");
+        up.assert_denied(TDM);
+        up.assert_allowed(AI);
+        up.assert_denied(GENAI);
+        up.assert_allowed(SEARCH);
+    }
+
+    #[test]
     fn deny_overrides_allow() {
         let mut up = UsagePreferences::default();
         up.parse("ai=y,ai=n,ai=y");
@@ -375,5 +396,18 @@ mod test {
         for usage in ALL {
             up.assert_unset(usage);
         }
+    }
+
+    #[test]
+    fn custom_domain() {
+        let mut up = UsagePreferences::blank();
+        up.add("a");
+        up.add("b");
+        up.add_child("c", "a");
+
+        up.parse("a=y,b=y");
+        up.assert_allowed("a");
+        up.assert_allowed("b");
+        up.assert_allowed("c");
     }
 }
