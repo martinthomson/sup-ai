@@ -312,6 +312,9 @@ mod test {
     fn allow_tdm() {
         let mut up = UsagePreferences::default();
         up.parse("tdm=y");
+        for usage in ALL {
+            up.assert_allowed(usage);
+        }
     }
 
     #[test]
