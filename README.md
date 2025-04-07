@@ -1,3 +1,5 @@
+<!-- regenerate: n -->
+
 # Short Usage Preference Strings for Automated Processing
 
 This is the working area for the individual Internet-Draft, "Short Usage Preference Strings for Automated Processing".
@@ -7,6 +9,26 @@ This is the working area for the individual Internet-Draft, "Short Usage Prefere
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-thomson-aipref-sup)
 * [Compare Editor's Copy to Individual Draft](https://martinthomson.github.io/sup-ai/#go.draft-thomson-aipref-sup.diff)
 
+
+## Rust Implementation
+
+This includes a simple Rust implementation, which can be used as follows:
+
+```rust
+use sup_ai::{UsagePreferences, UsagePreference::Allowed};
+
+// Construct usage preferences with the default usages.
+let mut up = UsagePreferences::default();
+
+// You can take any string or bytes you like.
+// This might be sourced from robots.txt, an HTTP header, metadata, or anywhere.
+let expression = "tdm=y,ai=n";
+up.parse(expression);
+
+// Evaluation determines whether the preference is to allow or deny the usage.
+let result = up.eval("search", Allowed);
+assert_eq!(result, Allowed);
+```
 
 ## Contributing
 
