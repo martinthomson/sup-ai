@@ -106,6 +106,8 @@ impl UsagePreferences {
     pub const SEARCH: &str = "search";
 
     /// Instantiate a blank usage preferences set with no usages registered.
+    ///
+    /// Note: Use the `Default` implementation to get the standard set of usages.
     pub fn blank() -> Self {
         Self {
             items: Vec::new(),
