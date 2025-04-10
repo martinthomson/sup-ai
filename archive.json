@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-08T01:42:13.686478+00:00",
+  "timestamp": "2025-04-10T01:42:25.102933+00:00",
   "repo": "martinthomson/sup-ai",
   "labels": [
     {
@@ -144,6 +144,22 @@
       "createdAt": "2025-03-17T08:50:23Z",
       "updatedAt": "2025-03-17T09:02:07Z",
       "closedAt": "2025-03-17T09:02:07Z",
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDON5XJEc6xyKeJ",
+      "title": "Applicability of robots.txt over time",
+      "url": "https://github.com/martinthomson/sup-ai/issues/6",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "A few things to consider:\n\nDoes the expression that is carried in robots.txt attach to content (a) while the robots.txt is fresh (in the caching sense) or (b) during the industry-standard 24 hours that crawlers are expected to follow?\n\nMoreover, if content is acquired *prior* to our work and used afterwards, what responsibility does the user of that content carry?  Should they ping robots.txt to get an updated version at the time of use?  Is that only applicable if there was no expression at the time that the content was originally acquired?  What if the site no longer has any record of that content and therefore the robots.txt doesn't obviously apply to the content?",
+      "createdAt": "2025-04-09T12:46:14Z",
+      "updatedAt": "2025-04-09T12:46:14Z",
+      "closedAt": null,
       "comments": []
     }
   ],
