@@ -1,14 +1,14 @@
-use std::{cmp::max, iter::Peekable};
+use std::cmp::max;
 
 #[derive(Default, PartialEq, Eq, Clone, Copy, Debug)]
-enum UsagePreferenceState {
+enum State {
     #[default]
     Unknown,
     Yes,
     No,
 }
 
-impl UsagePreferenceState {
+impl State {
     /// Produce a merged value from this and another value.
     ///
     /// Logic is: if either is "No", pick "No".
@@ -29,59 +29,28 @@ pub enum UsagePreference {
     Denied,
 }
 
-impl TryFrom<UsagePreferenceState> for UsagePreference {
+impl TryFrom<State> for UsagePreference {
     type Error = ();
-    fn try_from(value: UsagePreferenceState) -> Result<Self, Self::Error> {
+    fn try_from(value: State) -> Result<Self, Self::Error> {
         match value {
-            UsagePreferenceState::Unknown => Err(()),
-            UsagePreferenceState::Yes => Ok(Self::Allowed),
-            UsagePreferenceState::No => Ok(Self::Denied),
+            State::Unknown => Err(()),
+            State::Yes => Ok(Self::Allowed),
+            State::No => Ok(Self::Denied),
         }
     }
 }
 
 #[derive(Debug)]
-struct UsagePreferenceItem {
+struct Item {
     name: Vec<u8>,
     parent: Option<usize>,
-    value: UsagePreferenceState,
+    value: State,
 }
 
 #[derive(Debug)]
 pub struct UsagePreferences {
-    items: Vec<UsagePreferenceItem>,
+    items: Vec<Item>,
     max_len: usize,
-}
-
-/// A simple wrapper that makes handling input sequences easier.
-trait Input {
-    fn peek(&mut self) -> Option<u8>;
-    fn next(&mut self) -> Option<u8>;
-    fn next_if(&mut self, f: impl FnOnce(u8) -> bool) -> Option<u8>;
-    fn skip_until(&mut self, f: impl Fn(u8) -> bool);
-    fn skip_ws(&mut self) {
-        self.skip_until(|c| !c.is_ascii_whitespace());
-    }
-}
-impl<'a, T> Input for Peekable<T>
-where
-    T: Iterator<Item = &'a u8> + 'a,
-{
-    fn peek(&mut self) -> Option<u8> {
-        Peekable::peek(self).copied().copied()
-    }
-
-    fn next(&mut self) -> Option<u8> {
-        Iterator::next(self).copied()
-    }
-
-    fn next_if(&mut self, f: impl FnOnce(u8) -> bool) -> Option<u8> {
-        Peekable::next_if(self, |&&c| f(c)).copied()
-    }
-
-    fn skip_until(&mut self, f: impl Fn(u8) -> bool) {
-        while Input::next_if(self, |c| !f(c)).is_some() {}
-    }
 }
 
 impl UsagePreferences {
@@ -108,6 +77,7 @@ impl UsagePreferences {
     /// Instantiate a blank usage preferences set with no usages registered.
     ///
     /// Note: Use the `Default` implementation to get the standard set of usages.
+    #[must_use]
     pub fn blank() -> Self {
         Self {
             items: Vec::new(),
@@ -115,30 +85,34 @@ impl UsagePreferences {
         }
     }
 
-    fn add_impl(&mut self, usage: impl AsRef<[u8]>, parent: Option<usize>) {
+    /// Common logic for the addition of a usage.
+    fn add_inner(&mut self, usage: impl AsRef<[u8]>, parent: Option<usize>) {
         let name = usage.as_ref();
         assert!(!name.contains(&b','), "usage name cannot contain a comma");
         assert!(!name.contains(&b'='), "usage name cannot contain equals");
         assert!(
-            self.items.iter().find(|it| it.name == name).is_none(),
+            !self.items.iter().any(|it| it.name == name),
             "duplicate usage added"
         );
         self.max_len = max(self.max_len, name.len());
-        self.items.push(UsagePreferenceItem {
+        self.items.push(Item {
             name: name.to_vec(),
             parent,
-            value: UsagePreferenceState::Unknown,
+            value: State::Unknown,
         });
     }
 
     /// Add a usage that this object will track.
     pub fn add(&mut self, usage: impl AsRef<[u8]>) {
-        self.add_impl(usage, None);
+        self.add_inner(usage, None);
     }
 
     /// Add a usage that this object will track.
     /// Include the identified parent type, which will be used if there is no preference
     /// expressed for this usage.
+    ///
+    /// # Panics
+    /// This panics if the identified parent cannot be found.
     pub fn add_child(&mut self, usage: impl AsRef<[u8]>, parent: impl AsRef<[u8]>) {
         let parent = parent.as_ref();
         let p = self
@@ -146,57 +120,164 @@ impl UsagePreferences {
             .iter()
             .position(|it| it.name == parent)
             .expect("parent not found");
-        self.add_impl(usage, Some(p));
-    }
-
-    fn parse_name(&self, r: &mut impl Input, max_len: usize) -> Option<usize> {
-        r.skip_ws();
-        let mut n = Vec::with_capacity(max_len);
-        for _ in 0..max_len {
-            if let Some(c) = r.next_if(|c| c != b'=' && c != b',') {
-                n.push(c);
-            } else {
-                break;
-            }
-        }
-        r.skip_ws();
-        if r.next_if(|c| c == b'=').is_some() {
-            let usage = n.trim_ascii_end();
-            if let Some(pos) = self.items.iter().position(|it| it.name == usage) {
-                return Some(pos);
-            }
-        }
-        None
-    }
-
-    fn parse_value(&self, r: &mut impl Input) -> UsagePreferenceState {
-        r.skip_ws();
-        let v = match r.next() {
-            Some(b'y') => UsagePreferenceState::Yes,
-            Some(b'n') => UsagePreferenceState::No,
-            _ => UsagePreferenceState::Unknown,
-        };
-        r.skip_ws();
-        if matches!(r.peek(), None | Some(b',')) {
-            v
-        } else {
-            UsagePreferenceState::Unknown
-        }
+        self.add_inner(usage, Some(p));
     }
 
     /// Parse the provided input.
     ///
     /// This adds the rules in the provided string to those that this object already holds.
+    #[cfg(not(feature = "sfv"))]
     pub fn parse(&mut self, expr: impl AsRef<[u8]>) {
-        let mut r = expr.as_ref().into_iter().peekable();
+        use std::iter::Peekable;
+
+        /// A simple wrapper that makes handling input sequences easier.
+        trait Input {
+            fn peek(&mut self) -> Option<u8>;
+            fn next(&mut self) -> Option<u8>;
+            fn next_if(&mut self, f: impl FnOnce(u8) -> bool) -> Option<u8>;
+            fn skip_until(&mut self, f: impl Fn(u8) -> bool);
+            fn skip_ws(&mut self) {
+                self.skip_until(|c| !c.is_ascii_whitespace());
+            }
+        }
+
+        impl<'a, T> Input for Peekable<T>
+        where
+            T: Iterator<Item = &'a u8> + 'a,
+        {
+            fn peek(&mut self) -> Option<u8> {
+                Peekable::peek(self).copied().copied()
+            }
+
+            fn next(&mut self) -> Option<u8> {
+                Iterator::next(self).copied()
+            }
+
+            fn next_if(&mut self, f: impl FnOnce(u8) -> bool) -> Option<u8> {
+                Peekable::next_if(self, |&&c| f(c)).copied()
+            }
+
+            fn skip_until(&mut self, f: impl Fn(u8) -> bool) {
+                while Input::next_if(self, |c| !f(c)).is_some() {}
+            }
+        }
+
+        fn parse_name(items: &[Item], r: &mut impl Input, max_len: usize) -> Option<usize> {
+            r.skip_ws();
+            let mut n = Vec::with_capacity(max_len);
+            for _ in 0..max_len {
+                if let Some(c) = r.next_if(|c| c != b'=' && c != b',') {
+                    n.push(c);
+                } else {
+                    break;
+                }
+            }
+            r.skip_ws();
+            if r.next_if(|c| c == b'=').is_some() {
+                let usage = n.trim_ascii_end();
+                if let Some(pos) = items.iter().position(|it| it.name == usage) {
+                    return Some(pos);
+                }
+            }
+            None
+        }
+
+        fn parse_value(r: &mut impl Input) -> State {
+            r.skip_ws();
+            let v = match r.next() {
+                Some(b'y') => State::Yes,
+                Some(b'n') => State::No,
+                _ => State::Unknown,
+            };
+            r.skip_ws();
+            if matches!(r.peek(), None | Some(b',')) {
+                v
+            } else {
+                State::Unknown
+            }
+        }
+
+        let mut r = expr.as_ref().iter().peekable();
         while r.peek().is_some() {
-            if let Some(i) = self.parse_name(&mut r, self.max_len) {
-                let v = self.parse_value(&mut r);
+            if let Some(i) = parse_name(&self.items, &mut r, self.max_len) {
+                let v = parse_value(&mut r);
                 self.items[i].value.merge(v);
             }
             r.skip_until(|c| c == b',');
             _ = Iterator::next(&mut r); // Discard any ','.
         }
+    }
+
+    #[cfg(feature = "sfv")]
+    pub fn parse(&mut self, expr: impl AsRef<[u8]>) {
+        use sfv::{
+            BareItemFromInput, Error as SfvError, KeyRef, Parser,
+            visitor::{
+                DictionaryVisitor, EntryVisitor, Ignored, InnerListVisitor, ItemVisitor,
+                ParameterVisitor,
+            },
+        };
+
+        struct PreferenceVisitor<'a> {
+            dict: &'a mut UsagePreferences,
+        }
+
+        impl<'a> DictionaryVisitor<'a> for PreferenceVisitor<'_> {
+            type Error = SfvError;
+
+            fn entry<'dv, 'ev>(
+                &'dv mut self,
+                key: &'a KeyRef,
+            ) -> Result<impl EntryVisitor<'ev>, Self::Error>
+            where
+                'dv: 'ev,
+            {
+                // A linear search is good enough for a small vocabulary.
+                let item = self.dict.items.iter_mut().find_map(|p| {
+                    if p.name == key.as_str().as_bytes() {
+                        Some(&mut p.value)
+                    } else {
+                        None
+                    }
+                });
+                Ok(UsageVisitor { item })
+            }
+        }
+
+        struct UsageVisitor<'a> {
+            // TODO move this option to the above when https://github.com/undef1nd/sfv/pull/184 lands
+            item: Option<&'a mut State>,
+        }
+
+        impl<'a> ItemVisitor<'a> for UsageVisitor<'_> {
+            type Error = SfvError;
+
+            fn bare_item<'pv>(
+                self,
+                bare_item: BareItemFromInput<'a>,
+            ) -> Result<impl ParameterVisitor<'pv>, Self::Error> {
+                if let Some(item) = self.item {
+                    if let Some(v) = bare_item.as_token() {
+                        match v.as_str() {
+                            "y" => item.merge(State::Yes),
+                            "n" => item.merge(State::No),
+                            _ => {}
+                        }
+                    }
+                }
+                Ok(Ignored)
+            }
+        }
+
+        impl EntryVisitor<'_> for UsageVisitor<'_> {
+            fn inner_list<'ilv>(self) -> Result<impl InnerListVisitor<'ilv>, Self::Error> {
+                Ok(Ignored) // do nothing
+            }
+        }
+
+        let parser = Parser::new(&expr);
+        let mut visitor = PreferenceVisitor { dict: self };
+        let _ignore_err = parser.parse_dictionary_with_visitor(&mut visitor);
     }
 
     /// Evaluate the usage preference against the given usage.
@@ -210,6 +291,7 @@ impl UsagePreferences {
                 return res;
             }
             i = if let Some(p) = self.items[i].parent {
+                debug_assert!(p < i, "avoid any potential infinite loop");
                 p
             } else {
                 return dflt;
@@ -371,7 +453,13 @@ mod test {
     #[test]
     fn whitespace() {
         let mut up = UsagePreferences::default();
-        up.parse(", tdm\t=\ry\n,,   =");
+
+        // Using SFV means that the grammar is slightly less permissive about whitespace.
+        up.parse(if cfg!(feature = "sfv") {
+            "x, tdm=y\n,,"
+        } else {
+            ", tdm\t=\ry\n,,   ="
+        });
         for usage in ALL {
             up.assert_allowed(usage);
         }

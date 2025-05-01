@@ -3,4 +3,17 @@ name = "sup-ai"
 version = "0.1.0"
 edition = "2024"
 
+[features]
+# default = ["sfv"]
+sfv = ["dep:sfv"]
+
 [dependencies]
+# sfv = {version = "0.11", optional = true, default-features = false}
+
+# TODO update this when https://github.com/undef1nd/sfv/pull/184 lands
+# TODO remove this once the code is released
+[dependencies.sfv]
+git = "https://github.com/undef1nd/sfv"
+rev = "4ca18d9ae627762002eb89ee4c1869f2224a1819"
+optional = true
+default-features = false
