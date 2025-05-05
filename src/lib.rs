@@ -240,13 +240,12 @@ impl UsagePreferences {
                         None
                     }
                 });
-                Ok(UsageVisitor { item })
+                Ok(item.map(|item| UsageVisitor { item }))
             }
         }
 
         struct UsageVisitor<'a> {
-            // TODO move this option to the above when https://github.com/undef1nd/sfv/pull/184 lands
-            item: Option<&'a mut State>,
+            item: &'a mut State,
         }
 
         impl<'a> ItemVisitor<'a> for UsageVisitor<'_> {
@@ -256,13 +255,11 @@ impl UsagePreferences {
                 self,
                 bare_item: BareItemFromInput<'a>,
             ) -> Result<impl ParameterVisitor<'pv>, Self::Error> {
-                if let Some(item) = self.item {
-                    if let Some(v) = bare_item.as_token() {
-                        match v.as_str() {
-                            "y" => item.merge(State::Yes),
-                            "n" => item.merge(State::No),
-                            _ => {}
-                        }
+                if let Some(v) = bare_item.as_token() {
+                    match v.as_str() {
+                        "y" => self.item.merge(State::Yes),
+                        "n" => self.item.merge(State::No),
+                        _ => {}
                     }
                 }
                 Ok(Ignored)
@@ -327,13 +324,13 @@ mod test {
     const SEARCH: &str = UsagePreferences::SEARCH;
     const ALL: &[&str] = &[TDM, AI, GENAI, SEARCH];
 
-    trait UsagePreferencesExt {
+    trait UsagePreferencesAssertions {
         fn assert_unset(&self, usage: &str);
         fn assert_allowed(&self, usage: &str);
         fn assert_denied(&self, usage: &str);
     }
 
-    impl UsagePreferencesExt for UsagePreferences {
+    impl UsagePreferencesAssertions for UsagePreferences {
         fn assert_unset(&self, usage: &str) {
             // There isn't an API for testing if something is set.
             // This checks that by testing that both defaults pass through.
@@ -485,7 +482,7 @@ mod test {
     #[test]
     fn invalid_unicode() {
         let mut up = UsagePreferences::default();
-        up.parse(&[0xff, 0x00]);
+        up.parse([0xff, 0x00]);
         for usage in ALL {
             up.assert_unset(usage);
         }
