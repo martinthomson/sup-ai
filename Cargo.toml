@@ -8,11 +8,4 @@ default = ["sfv"]
 sfv = ["dep:sfv"]
 
 [dependencies]
-# sfv = {version = "0.12", optional = true, default-features = false}
-
-# TODO remove this once 0.12 is released
-[dependencies.sfv]
-git = "https://github.com/undef1nd/sfv"
-rev = "d6b286ff88fe2c48205368300bc42cc46ba43dd5"
-optional = true
-default-features = false
+sfv = {version = "0.12", optional = true, default-features = false}
