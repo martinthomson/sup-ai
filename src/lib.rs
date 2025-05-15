@@ -195,12 +195,12 @@ mod sfv {
                     None
                 }
             });
-            Ok(item.map(|item| UsageVisitor { item }))
+            Ok(UsageVisitor { item })
         }
     }
 
     struct UsageVisitor<'a> {
-        item: &'a mut State,
+        item: Option<&'a mut State>,
     }
 
     impl<'a> ItemVisitor<'a> for UsageVisitor<'_> {
@@ -214,11 +214,13 @@ mod sfv {
             self,
             bare_item: BareItemFromInput<'a>,
         ) -> Result<impl ParameterVisitor<'a>, Self::Error> {
-            if let Some(v) = bare_item.as_token() {
-                match v.as_str() {
-                    "y" => self.item.merge(State::Yes),
-                    "n" => self.item.merge(State::No),
-                    _ => {}
+            if let Some(item) = self.item {
+                if let Some(v) = bare_item.as_token() {
+                    match v.as_str() {
+                        "y" => item.merge(State::Yes),
+                        "n" => item.merge(State::No),
+                        _ => {}
+                    }
                 }
             }
             Ok(Ignored)
