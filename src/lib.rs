@@ -180,13 +180,13 @@ mod sfv {
     impl<'a> DictionaryVisitor<'a> for PreferenceVisitor<'_> {
         type Error = SfvError;
 
-        fn entry<'dv, 'ev>(
-            &'dv mut self,
-            key: &'a KeyRef,
-        ) -> Result<impl EntryVisitor<'ev>, Self::Error>
-        where
-            'dv: 'ev,
-        {
+        // fn entry<'dv, 'ev>(
+        //     &'dv mut self,
+        //     key: &'a KeyRef,
+        // ) -> Result<impl EntryVisitor<'ev>, Self::Error>
+        // where
+        //     'dv: 'ev,
+        fn entry(&mut self, key: &'a KeyRef) -> Result<impl EntryVisitor<'a>, Self::Error> {
             // A linear search is good enough for a small vocabulary.
             let item = self.dict.items.iter_mut().find_map(|p| {
                 if p.name == key.as_str().as_bytes() {
@@ -206,10 +206,14 @@ mod sfv {
     impl<'a> ItemVisitor<'a> for UsageVisitor<'_> {
         type Error = SfvError;
 
-        fn bare_item<'pv>(
+        // fn bare_item<'pv>(
+        //     self,
+        //     bare_item: BareItemFromInput<'a>,
+        // ) -> Result<impl ParameterVisitor<'pv>, Self::Error> {
+        fn bare_item(
             self,
             bare_item: BareItemFromInput<'a>,
-        ) -> Result<impl ParameterVisitor<'pv>, Self::Error> {
+        ) -> Result<impl ParameterVisitor<'a>, Self::Error> {
             if let Some(v) = bare_item.as_token() {
                 match v.as_str() {
                     "y" => self.item.merge(State::Yes),
@@ -221,8 +225,9 @@ mod sfv {
         }
     }
 
-    impl EntryVisitor<'_> for UsageVisitor<'_> {
-        fn inner_list<'ilv>(self) -> Result<impl InnerListVisitor<'ilv>, Self::Error> {
+    impl<'a> EntryVisitor<'a> for UsageVisitor<'_> {
+        // fn inner_list<'ilv>(self) -> Result<impl InnerListVisitor<'ilv>, Self::Error> {
+        fn inner_list(self) -> Result<impl InnerListVisitor<'a>, Self::Error> {
             Ok(Ignored) // do nothing
         }
     }

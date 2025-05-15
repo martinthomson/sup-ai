@@ -8,4 +8,5 @@ default = ["sfv"]
 sfv = ["dep:sfv"]
 
 [dependencies]
-sfv = {version = "0.12", optional = true, default-features = false}
+# sfv = {version = "0.12", optional = true, default-features = false}
+sfv = {version = "0.11", optional = true, default-features = false}
