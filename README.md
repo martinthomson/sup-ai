@@ -20,7 +20,7 @@ use sup_ai::{UsagePreferences, UsagePreference::Allowed};
 // Construct usage preferences with the default usages.
 let mut up = UsagePreferences::default();
 
-// You can take any string or bytes you like.
+// An expression is a string or bytes, as dictated by the source.
 // This might be sourced from robots.txt, an HTTP header, metadata, or anywhere.
 let expression = "tdm=y,ai=n";
 up.parse(expression);
