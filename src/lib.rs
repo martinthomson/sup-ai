@@ -54,24 +54,32 @@ pub struct UsagePreferences {
 }
 
 impl UsagePreferences {
-    /// Text and Data Mining usage.
+    /// Automated Processing.
     ///
-    /// This is a very broadly-defined category of usage that covers most automated processing of content.
-    pub const TDM: &str = "tdm";
-    /// Artificial Intelligence (or Machine Learning).
+    /// The act of using one or more assets in the context of automated processing
+    /// aimed at analyzing text and data in order to generate information
+    /// which includes but is not limited to patterns, trends and correlations.
+    pub const ALL: &str = "all";
+    /// Artificial Intelligence (or Machine Learning) Training.
     ///
-    /// This relates to any use of the content for training or operation of machine learning models.
-    pub const AI: &str = "ai";
-    /// Generative AI.
+    /// The act of training machine learning models or artificial intelligence (AI).
+    pub const TRAIN_AI: &str = "train-ai";
+    /// Generative AI Training.
     ///
-    /// Use of the content for training or operation of "foundational" models,
-    /// or those that are capable of producing content.
-    pub const GENAI: &str = "genai";
+    /// The act of training general purpose AI models that have the capacity
+    /// to generate text, images or other forms of synthetic content, or
+    /// the act of training more specialized AI models that have the purpose
+    /// of generating text, images or other forms of synthetic content.
+    pub const TRAIN_GENAI: &str = "train-genai";
+    /// AI Use.
+    ///
+    /// The act of using one or more assets as input to a trained AI/ML model
+    /// as part of the operation of that model (as opposed to the training of the model).
+    pub const AI_USE: &str = "ai-use";
     /// Search.
     ///
-    /// The use of content for the building of a search index
-    /// and ultimately the usage of that index to produce a product that exists
-    /// primarily to direct people to the location where the content was obtained.
+    /// Using one or more assets in a search application
+    /// that directs users to the location from which the assets were retrieved.
     pub const SEARCH: &str = "search";
 
     /// Instantiate a blank usage preferences set with no usages registered.
@@ -320,10 +328,11 @@ impl Default for UsagePreferences {
             items: Vec::with_capacity(4),
             max_len: 0,
         };
-        v.add(Self::TDM);
-        v.add_child(Self::AI, Self::TDM);
-        v.add_child(Self::GENAI, Self::AI);
-        v.add_child(Self::SEARCH, Self::TDM);
+        v.add(Self::ALL);
+        v.add_child(Self::TRAIN_AI, Self::ALL);
+        v.add_child(Self::TRAIN_GENAI, Self::TRAIN_AI);
+        v.add_child(Self::AI_USE, Self::ALL);
+        v.add_child(Self::SEARCH, Self::ALL);
         v
     }
 }
@@ -335,11 +344,12 @@ mod test {
         UsagePreferences,
     };
 
-    const TDM: &str = UsagePreferences::TDM;
-    const GENAI: &str = UsagePreferences::GENAI;
-    const AI: &str = UsagePreferences::AI;
+    const ALL: &str = UsagePreferences::ALL;
+    const TRAIN_GENAI: &str = UsagePreferences::TRAIN_GENAI;
+    const TRAIN_AI: &str = UsagePreferences::TRAIN_AI;
     const SEARCH: &str = UsagePreferences::SEARCH;
-    const ALL: &[&str] = &[TDM, AI, GENAI, SEARCH];
+    const AI_USE: &str = UsagePreferences::AI_USE;
+    const EVERYTHING: &[&str] = &[ALL, TRAIN_AI, TRAIN_GENAI, SEARCH];
 
     trait UsagePreferencesAssertions {
         fn assert_unset(&self, usage: &str);
@@ -372,15 +382,15 @@ mod test {
     #[test]
     fn make_default() {
         let up = UsagePreferences::default();
-        assert_eq!(up.items.len(), 4);
-        assert_eq!(up.max_len, 6);
+        assert_eq!(up.items.len(), 5);
+        assert_eq!(up.max_len, 11);
     }
 
     #[test]
     #[should_panic(expected = "duplicate usage added")]
     fn add_duplicate() {
         let mut up = UsagePreferences::default();
-        up.add("tdm");
+        up.add("all");
     }
 
     #[test]
@@ -407,8 +417,8 @@ mod test {
     #[test]
     fn allow_tdm() {
         let mut up = UsagePreferences::default();
-        up.parse("tdm=y");
-        for usage in ALL {
+        up.parse("all=y");
+        for usage in EVERYTHING {
             up.assert_allowed(usage);
         }
     }
@@ -416,52 +426,58 @@ mod test {
     #[test]
     fn allow_ai() {
         let mut up = UsagePreferences::default();
-        up.parse("ai=y");
-        up.assert_unset(TDM);
-        up.assert_allowed(AI);
-        up.assert_allowed(GENAI);
+        up.parse("train-ai=y");
+        up.assert_unset(ALL);
+        up.assert_allowed(TRAIN_AI);
+        up.assert_allowed(TRAIN_GENAI);
         up.assert_unset(SEARCH);
+        up.assert_unset(AI_USE);
     }
 
     #[test]
     fn deny_search() {
         let mut up = UsagePreferences::default();
         up.parse("search=n");
-        up.assert_unset(TDM);
-        up.assert_unset(AI);
-        up.assert_unset(GENAI);
+        up.assert_unset(ALL);
+        up.assert_unset(TRAIN_AI);
+        up.assert_unset(TRAIN_GENAI);
         up.assert_denied(SEARCH);
+        up.assert_unset(AI_USE);
     }
 
     #[test]
     fn full() {
         let mut up = UsagePreferences::default();
-        up.parse("genai=y,search=n,tdm=y,ai=n");
-        up.assert_allowed(TDM);
-        up.assert_denied(AI);
-        up.assert_allowed(GENAI);
+        up.parse("train-genai=y,search=n,all=y,train-ai=n,ai-use=n");
+        up.assert_allowed(ALL);
+        up.assert_denied(TRAIN_AI);
+        up.assert_allowed(TRAIN_GENAI);
         up.assert_denied(SEARCH);
+        up.assert_denied(AI_USE);
     }
 
     #[test]
     fn full_split() {
         let mut up = UsagePreferences::default();
-        up.parse("search=y,tdm=n");
-        up.parse("genai=n,ai=y");
-        up.assert_denied(TDM);
-        up.assert_allowed(AI);
-        up.assert_denied(GENAI);
+        up.parse("search=y,all=n");
+        up.parse("train-genai=n,train-ai=y");
+        up.parse("ai-use=y");
+        up.assert_denied(ALL);
+        up.assert_allowed(TRAIN_AI);
+        up.assert_denied(TRAIN_GENAI);
         up.assert_allowed(SEARCH);
+        up.assert_allowed(AI_USE);
     }
 
     #[test]
     fn deny_overrides_allow() {
         let mut up = UsagePreferences::default();
-        up.parse("ai=y,ai=n,ai=y");
-        up.assert_unset(TDM);
-        up.assert_denied(AI);
-        up.assert_denied(GENAI);
+        up.parse("train-ai=y,train-ai=n,train-ai=y");
+        up.assert_unset(ALL);
+        up.assert_denied(TRAIN_AI);
+        up.assert_denied(TRAIN_GENAI);
         up.assert_unset(SEARCH);
+        up.assert_unset(AI_USE);
     }
 
     #[test]
@@ -470,11 +486,11 @@ mod test {
 
         // Using SFV means that the grammar is slightly less permissive about whitespace.
         up.parse(if cfg!(feature = "sfv") {
-            "x, tdm=y\n,,"
+            "x, all=y\n,,"
         } else {
-            ", tdm\t=\ry\n,,   ="
+            ", all\t=\ry\n,,   ="
         });
-        for usage in ALL {
+        for usage in EVERYTHING {
             up.assert_allowed(usage);
         }
     }
@@ -482,8 +498,8 @@ mod test {
     #[test]
     fn invalid_value() {
         let mut up = UsagePreferences::default();
-        up.parse("tdm=junk,tdm=y,tdm=no");
-        for usage in ALL {
+        up.parse("all=junk,all=y,all=no");
+        for usage in EVERYTHING {
             up.assert_allowed(usage);
         }
     }
@@ -500,7 +516,7 @@ mod test {
     fn invalid_unicode() {
         let mut up = UsagePreferences::default();
         up.parse([0xff, 0x00]);
-        for usage in ALL {
+        for usage in EVERYTHING {
             up.assert_unset(usage);
         }
     }
