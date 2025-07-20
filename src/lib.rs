@@ -1,5 +1,8 @@
 use std::cmp::max;
 
+#[cfg(feature = "robots")]
+pub mod robots;
+
 #[derive(Default, PartialEq, Eq, Clone, Copy, Debug)]
 enum State {
     #[default]
@@ -40,14 +43,14 @@ impl TryFrom<State> for UsagePreference {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Item {
     name: Vec<u8>,
     parent: Option<usize>,
     value: State,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UsagePreferences {
     items: Vec<Item>,
     max_len: usize,
@@ -131,22 +134,41 @@ impl UsagePreferences {
         self.add_inner(usage, Some(p));
     }
 
-    /// Evaluate the usage preference against the given usage.
-    pub fn eval(&self, usage: impl AsRef<[u8]>, dflt: UsagePreference) -> UsagePreference {
-        let usage = usage.as_ref();
-        let Some(mut i) = self.items.iter().position(|it| it.name == usage) else {
-            return dflt;
-        };
+    /// Determine the state of a given thing,
+    /// including the cascade from higher-level items in the hierarchy.
+    fn get_state(&self, mut i: usize) -> State {
         loop {
-            if let Ok(res) = UsagePreference::try_from(self.items[i].value) {
-                return res;
+            if self.items[i].value != State::Unknown {
+                return self.items[i].value;
             }
             i = if let Some(p) = self.items[i].parent {
                 debug_assert!(p < i, "avoid any potential infinite loop");
                 p
             } else {
-                return dflt;
+                return State::Unknown;
             };
+        }
+    }
+
+    /// Find the index of the given item.
+    fn index_of(&self, usage: &[u8]) -> Option<usize> {
+        self.items.iter().position(|it| it.name == usage)
+    }
+
+    /// Evaluate the usage preference against the given usage.
+    pub fn eval(&self, usage: impl AsRef<[u8]>, dflt: UsagePreference) -> UsagePreference {
+        let Some(i) = self.index_of(usage.as_ref()) else {
+            return dflt;
+        };
+        UsagePreference::try_from(self.get_state(i)).unwrap_or(dflt)
+    }
+
+    /// Combine two sets of preferences.
+    pub fn merge(&mut self, other: &Self) {
+        for item in &mut self.items {
+            if let Some(idx) = other.index_of(&item.name) {
+                item.value.merge(other.get_state(idx))
+            }
         }
     }
 
@@ -338,11 +360,43 @@ impl Default for UsagePreferences {
 }
 
 #[cfg(test)]
+trait UsagePreferencesAssertions {
+    fn assert_unset(&self, usage: &str);
+    fn assert_allowed(&self, usage: &str);
+    fn assert_denied(&self, usage: &str);
+}
+
+#[cfg(test)]
+impl UsagePreferencesAssertions for UsagePreferences {
+    fn assert_unset(&self, usage: &str) {
+        // There isn't an API for testing if something is set.
+        // This checks that by testing that both defaults pass through.
+        assert_eq!(
+            self.eval(usage, UsagePreference::Denied),
+            UsagePreference::Denied
+        );
+        assert_eq!(
+            self.eval(usage, UsagePreference::Allowed),
+            UsagePreference::Allowed
+        );
+    }
+    fn assert_allowed(&self, usage: &str) {
+        assert_eq!(
+            self.eval(usage, UsagePreference::Denied),
+            UsagePreference::Allowed
+        );
+    }
+    fn assert_denied(&self, usage: &str) {
+        assert_eq!(
+            self.eval(usage, UsagePreference::Allowed),
+            UsagePreference::Denied
+        );
+    }
+}
+
+#[cfg(test)]
 mod test {
-    use crate::{
-        UsagePreference::{Allowed, Denied},
-        UsagePreferences,
-    };
+    use crate::{UsagePreferences, UsagePreferencesAssertions};
 
     const ALL: &str = UsagePreferences::ALL;
     const TRAIN_GENAI: &str = UsagePreferences::TRAIN_GENAI;
@@ -350,27 +404,6 @@ mod test {
     const SEARCH: &str = UsagePreferences::SEARCH;
     const AI_USE: &str = UsagePreferences::AI_USE;
     const EVERYTHING: &[&str] = &[ALL, TRAIN_AI, TRAIN_GENAI, SEARCH];
-
-    trait UsagePreferencesAssertions {
-        fn assert_unset(&self, usage: &str);
-        fn assert_allowed(&self, usage: &str);
-        fn assert_denied(&self, usage: &str);
-    }
-
-    impl UsagePreferencesAssertions for UsagePreferences {
-        fn assert_unset(&self, usage: &str) {
-            // There isn't an API for testing if something is set.
-            // This checks that by testing that both defaults pass through.
-            assert_eq!(self.eval(usage, Denied), Denied);
-            assert_eq!(self.eval(usage, Allowed), Allowed);
-        }
-        fn assert_allowed(&self, usage: &str) {
-            assert_eq!(self.eval(usage, Denied), Allowed);
-        }
-        fn assert_denied(&self, usage: &str) {
-            assert_eq!(self.eval(usage, Allowed), Denied);
-        }
-    }
 
     #[test]
     fn make_blank() {
