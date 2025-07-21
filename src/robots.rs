@@ -237,9 +237,15 @@ content-usage :train-ai=y, search=y
  content-usage: /*.jpg$ train-ai=n
 user-agenT:WhateVer#
 allow: /
+allow: /**
+disallow  : /*$
+allow: /
 content-usage: all=y
 User-Agent: *
+user-agent:otherrrrrr
 Content-Usage: search=n
+content-USAGE: /NO-PREFS
+allow: # no path
 "#;
         let r = Robots::parse(FILE).unwrap();
         assert!(r.preferences("ExampleBot", "/foo").is_none());
