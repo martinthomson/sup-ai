@@ -234,7 +234,7 @@ User-Agent: *
 disAllow: /
 allow: /*e**mple**$ # A very bad, but still valid, use of the '*' rule
 allow:/allow # Whatever
-content-usage :train-ai=y
+content-usage :train-ai=y, search=y
  content-usage: /*.jpg$ train-ai=n
 user-agenT:WhateVer#
 allow: /
