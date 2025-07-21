@@ -1,6 +1,6 @@
 use std::{
     cmp::Ordering::{Equal, Greater, Less},
-    io::{BufRead, Cursor, Result},
+    io::{BufRead, Result},
 };
 
 use crate::UsagePreferences;
@@ -50,6 +50,7 @@ struct Group {
 }
 
 impl Group {
+    /// Take a loosely-parsed line and integrate it into this group.
     fn parse_line(&mut self, line: usize, name: &str, value: &str) {
         if name.eq_ignore_ascii_case("content-usage") {
             {
@@ -63,8 +64,7 @@ impl Group {
                 };
                 let mut usage = UsagePreferences::default();
                 usage.parse(expr);
-                self
-                    .usage_preferences
+                self.usage_preferences
                     .push(ContentUsageLine::new(line, path.to_string(), usage));
             };
         } else if name.eq_ignore_ascii_case("allow") {
@@ -151,14 +151,14 @@ pub struct Robots {
 }
 
 impl Robots {
-    pub fn parse(input: impl AsRef<[u8]>) -> Result<Self> {
+    pub fn parse(mut input: impl BufRead) -> Result<Self> {
         let mut r = Self { groups: Vec::new() };
-        let mut c = Cursor::new(input);
-        let mut buf = String::new();
-        let mut line = 0;
         let mut group = Group::default();
+        let mut line = 0;
         let mut ua = false;
-        while c.read_line(&mut buf)? > 0 {
+
+        let mut buf = String::new();
+        while input.read_line(&mut buf)? > 0 {
             line += 1;
             if let Some((name, value)) = buf
                 .split_once('#')
@@ -227,8 +227,7 @@ mod test {
 
     #[test]
     fn parse_basic() {
-        let r = Robots::parse(
-            r#"
+        const FILE: &[u8] = br#"
 User-Agent: *
 # Comments
 disAllow: /
@@ -241,9 +240,8 @@ allow: /
 content-usage: all=y
 User-Agent: *
 Content-Usage: search=n
-        "#,
-        )
-        .unwrap();
+"#;
+        let r = Robots::parse(FILE).unwrap();
         assert!(r.preferences("ExampleBot", "/foo").is_none());
         assert!(r.preferences("whateverbot", "/example").is_some());
         let p = r.preferences("eXaMpLeBot", "/allowed").unwrap();

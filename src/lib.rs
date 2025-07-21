@@ -566,4 +566,35 @@ mod test {
         up.assert_allowed("b");
         up.assert_allowed("c");
     }
+
+    #[test]
+    fn merge() {
+        let mut up1 = UsagePreferences::default();
+        up1.parse("train-gen=y");
+        let mut up2 = UsagePreferences::default();
+        up2.parse("train-ai=n");
+        up1.merge(&up2);
+        up1.assert_unset(ALL);
+        up1.assert_denied(TRAIN_AI);
+        up1.assert_denied(TRAIN_GENAI);
+        up1.assert_unset(AI_USE);
+        up1.assert_unset(SEARCH);
+    }
+
+    #[test]
+    fn merge_unrelated() {
+        let mut up1 = UsagePreferences::default();
+        up1.parse("train-gen=y");
+        let mut up2 = UsagePreferences::blank();
+        up2.add(TRAIN_AI);
+        up2.add("a");
+        up2.parse("train-ai=n, a=y");
+        up1.merge(&up2);
+        up1.assert_unset(ALL);
+        up1.assert_denied(TRAIN_AI);
+        up1.assert_denied(TRAIN_GENAI);
+        up1.assert_unset(AI_USE);
+        up1.assert_unset(SEARCH);
+        up1.assert_unset("a");
+    }
 }
